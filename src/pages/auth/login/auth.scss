@@ -1,0 +1,51 @@
+@import "../../../style.scss";
+
+#login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../../assets/bg.png");
+  object-fit: cover;
+  object-position: center;
+
+  form {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      width: 100%;
+      position: relative;
+      > input {
+        width: 100%;
+
+      }
+
+      svg {
+        position: absolute;
+        top: 50%;
+        right: 2%;
+        transform: translate(-2%, -50%);
+      }
+    }
+
+    img {
+      width: 120px;
+    }
+
+    > input {
+      width: 100%;
+    }
+
+    > button {
+      width: 100%;
+    }
+  }
+}

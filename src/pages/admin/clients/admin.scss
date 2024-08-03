@@ -1,0 +1,59 @@
+@import "../../../style.scss";
+
+#add-clients {
+  width: 100%;
+  background-color: $light-color;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .upload-file {
+    width: 100%;
+    height: 200px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 8px;
+    .upload-icon {
+      font-size: 5vw;
+    }
+
+    .parsed-clients {
+      width: 100%;
+      padding: 10px;
+      background-color: white;
+    }
+
+  }
+
+  
+  .primary-btn{
+    padding: 11px;
+    font-size: 14px;
+    font-weight: 550;
+}
+}
+
+
+.c-actions{
+  display: flex;
+  flex-direction: column;
+
+  div{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  form{
+  >button{
+    margin-top: 5px;
+  }  
+  }
+
+  
+}

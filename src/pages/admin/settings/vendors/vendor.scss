@@ -1,0 +1,26 @@
+@import "../../../../style.scss";
+
+#vendor {
+  .actions-row {
+    justify-content: space-between;
+
+    > input {
+      width: 300px;
+      background-color: white;
+    }
+  }
+  form {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    button{
+        margin-top: 8px;
+    }
+    input {
+      width: 300px;
+      background-color: white;
+      padding: 8px;
+    }
+  }
+}

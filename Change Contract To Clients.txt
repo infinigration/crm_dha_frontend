@@ -1,0 +1,4 @@
+Change Contract To Clients
+Change Client Table as per provided by the MAM
+Check Program and Make it work properly
+Change duration in program to string

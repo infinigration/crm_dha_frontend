@@ -1,0 +1,33 @@
+@import "../../style.scss";
+
+.task-summary {
+    width: 100%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 25px;
+
+    table {
+        td {
+            border: 1px solid rgba(0, 0, 0, 0.322);
+
+            overflow: hidden;
+        }
+        .a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1vw;
+
+            > div {
+                display: flex;
+                align-items: center;
+                gap: 1vw;
+                > button {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

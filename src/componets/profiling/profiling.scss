@@ -1,0 +1,27 @@
+@import "../../style.scss";
+
+#profiling {
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: white;
+  margin-top: 25px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+    .la {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+    }
+  }
+}

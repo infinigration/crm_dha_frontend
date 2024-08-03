@@ -1,0 +1,30 @@
+@import "../../style.scss";
+
+.filter-leads {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+
+    .inputs-row {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        > div {
+            flex-basis: 32%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4vw;
+            margin-bottom: 1vw;
+        }
+    }
+}
+
+
+#filtered_leads{
+    table{
+        margin-top: 30px;
+    }
+}

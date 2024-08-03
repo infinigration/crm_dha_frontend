@@ -1,0 +1,214 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+$accent-color: #4364b7;
+$light-color: #f1f1f1;
+$dark-color: #363636;
+$text-color: #828282;
+$transparent-accent-color: #4364b72f;
+$red: #a71021;
+body{
+    background-color: $light-color;
+}
+.section {
+    width: 100%;
+}
+.logo {
+    width: 120px;
+}
+.row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+a {
+    text-decoration: none;
+    font-size: 14px;
+    color: $text-color;
+}
+label {
+    font-size: 12px;
+    font-weight: 500;
+    color: $dark-color;
+}
+input {
+    border: none;
+    outline: none;
+    background-color: $light-color;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.primary-btn {
+    min-width: 100px;
+    padding: 8px 16px;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    color: white;
+
+    background-color: $accent-color;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+.hide {
+    display: none;
+}
+
+.heading {
+    font-weight: 600;
+}
+
+table {
+    width: 100%;
+    text-align: left;
+
+    thead {
+        background-color: $dark-color;
+    }
+    tr {
+    }
+
+    th,
+    td {
+        padding: 8px;
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    td {
+        background-color: white;
+        color: $dark-color;
+        padding: 10px;
+
+        a,
+        button {
+            padding: 4px 16px;
+            background-color: $accent-color;
+            color: white;
+            font-size: 12px;
+            border-radius: 4px;
+            border: none;
+            outline: none;
+        }
+    }
+
+    .span-td {
+        > span {
+            margin-left: 8px;
+        }
+    }
+}
+
+.delete {
+    padding: 4px 16px;
+    background-color: $accent-color;
+    color: white;
+    font-size: 12px;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    background-color: crimson;
+    cursor: pointer;
+}
+
+.actions-row {
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    justify-content: flex-end;
+}
+.actions {
+    display: flex;
+    gap: 0.5vw;
+}
+
+.act-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vw;
+    .a-row {
+        display: flex;
+        gap: 1vw;
+        align-items: center;
+    }
+
+    form {
+        display: flex;
+
+        gap: 1vw;
+        > input {
+            width: 80%;
+        }
+    }
+}
+
+.success,
+.pending,
+.fail {
+    background-color: rgba(0, 128, 0, 0.253);
+    padding: 4px 8px;
+    font-size: 10px;
+    border-radius: 2px;
+    color: green;
+}
+
+.pending {
+    background-color: rgba(255, 255, 0, 0.253);
+    color: rgb(110, 110, 0);
+}
+
+.fail {
+    background-color: rgba(220, 20, 60, 0.253);
+    color: crimson;
+}
+
+.sub-drop {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    width: 90%;
+    transform: translateY("100%");
+    transition: 0.3s ease-in;
+    > a {
+        width: 100%;
+
+        margin-bottom: 10px;
+        transition: 0.2s ease-in;
+    }
+
+    a:hover {
+        width: 100%;
+        background-color: $accent-color;
+        padding: 8px;
+        color: white;
+        border-radius: 4px;
+    }
+
+    .active {
+        width: 100%;
+        background-color: $accent-color;
+        padding: 8px;
+        color: white;
+        border-radius: 4px;
+    }
+}
+
+.heading {
+    font-size: 20px;
+    color: $dark-color;
+    font-weight: 600;
+}

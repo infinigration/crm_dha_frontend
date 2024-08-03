@@ -1,0 +1,37 @@
+@import "../../style.scss";
+
+.f-stats {
+  width: 24%;
+  height: 200px;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  justify-content: center;
+  margin-right: 1%;
+  gap: 4px;
+  .icon {
+    width: 60px;
+    height: 60px;
+    background-color: $light-color;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    > svg {
+      color: $accent-color;
+      width: 20px;
+    }
+  }
+
+  > .title {
+    color: $text-color;
+  }
+
+  .number {
+    font-size: 28px;
+    font-weight: 600;
+  }
+}

@@ -1,0 +1,178 @@
+@import "../../style.scss";
+
+#sidebar {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $light-color;
+
+  .nav {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    flex-basis: 15%;
+    min-height: 100vh;
+    padding: 30px;
+    gap: 1vw;
+    position: sticky;
+    top: 0;
+    left: 0;
+    div {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      a {
+        width: 100%;
+      }
+    }
+
+    .link-container {
+      .visible {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      ul {
+        margin: 10px 0;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        li {
+          list-style: none;
+
+          a {
+            transition: 0.2s ease-in;
+
+            display: flex;
+            flex-direction: column;
+            position: relative;
+          }
+
+          a:hover {
+            width: 100%;
+            background-color: $accent-color;
+            padding: 8px;
+
+            border-radius: 4px;
+            color: white;
+          }
+        }
+      }
+    }
+    > .link-container > a {
+      transition: 0.2s ease-in;
+
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .link-container > a:hover {
+      width: 100%;
+      background-color: $accent-color;
+      padding: 8px;
+
+      border-radius: 4px;
+      color: white;
+    }
+
+    .active {
+      width: 100%;
+      background-color: $accent-color;
+      padding: 8px;
+      color: white;
+      border-radius: 4px;
+    }
+  }
+
+  .component-area {
+    flex-basis: 85%;
+    padding: 30px 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    .content {
+      width: 90%;
+    }
+
+    .header {
+      width: 100%;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      padding: 5px 20px;
+      border-radius: 8px;
+
+      > p {
+        font-size: 1vw;
+
+        > span {
+          color: $accent-color;
+          font-weight: 600;
+        }
+      }
+
+      > .icons {
+        position: relative;
+        img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          object-fit: cover;
+          object-position: center;
+          zoom: 1;
+          cursor: pointer;
+        }
+
+        .dropdown {
+          width: 220px;
+
+          position: absolute;
+          right: 0;
+          background-color: white;
+          padding: 14px;
+          border-radius: 4px;
+          border: 1px solid rgba(0, 0, 0, 0.089);
+          > ul {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5vw;
+
+            > button {
+              background-color: transparent;
+              border: none;
+              outline: none;
+              text-align: left;
+              font-size: 14px;
+              color: $text-color;
+              cursor: pointer;
+            }
+
+            a,
+            button {
+              transition: 0.2s ease-in-out;
+            }
+
+            a:hover,
+            button:hover {
+              background-color: $accent-color;
+              color: white;
+              padding: 7px;
+              border-radius: 4px;
+              color: $light-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}

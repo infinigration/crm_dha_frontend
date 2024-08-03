@@ -1,0 +1,19 @@
+@import "../../style.scss";
+
+#loader {
+    height: 100vh;
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: $accent-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    > h1 {
+        font-size: 2vw;
+        color: white;
+        text-transform: uppercase;
+    }
+}

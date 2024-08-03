@@ -1,0 +1,31 @@
+@import "../../../style.scss";
+
+#admin-remarks {
+  width: 100%;
+  background-color: white;
+  margin-top: 25px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  form {
+    margin: 10px 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    textarea{
+        border: none;
+        background-color: $light-color;
+        padding: 10px;
+        border-radius: 4px;
+    }
+  }
+  .no_remarks {
+    font-size: 16px;
+    font-weight: 500;
+  }
+}

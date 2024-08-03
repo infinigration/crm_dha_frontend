@@ -1,0 +1,184 @@
+@import "../../../style.scss";
+
+#admin-invoices {
+  .actions-row {
+    justify-content: space-between;
+  }
+}
+
+#create_invoice {
+  form {
+    background-color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 8px;
+  }
+}
+
+#view_invoice {
+  width: 100%;
+  height: auto;
+  padding: 50px 30px;
+  border-radius: 8px;
+  background-color: white;
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .company {
+      display: flex;
+      align-items: center;
+      gap: 2vw;
+
+      > div {
+        p:nth-child(1) {
+          font-size: 1.4vw;
+          font-weight: 550;
+          color: $dark_color;
+        }
+
+        p:nth-child(2) {
+          color: $dark-color;
+          font-size: 16px;
+        }
+
+        p:nth-child(3) {
+          color: $dark-color;
+        }
+
+        p:nth-child(4),
+        p:nth-child(5) {
+          color: $dark-color;
+
+          span {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+    .inv {
+      p:nth-child(1) {
+        font-size: 2vw;
+        color: $accent-color;
+      }
+
+      p:nth-child(2) {
+        color: $dark-color;
+        span {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .bill-to {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 50px 0;
+
+    div:nth-child(1) {
+      span {
+        color: $accent-color;
+        font-weight: 600;
+        font-size: 16px;
+      }
+      .name {
+        font-size: 14px;
+        color: $dark-color;
+        span {
+          color: $dark-color;
+          font-size: 16px;
+        }
+      }
+    }
+
+    table {
+      width: 400px;
+
+      th,
+      td {
+        color: $dark-color;
+        border: 1px solid $dark-color;
+      }
+    }
+  }
+
+  table {
+    margin: 10px 0;
+
+    td{
+      border: 1px solid $dark-color;
+    }
+  }
+
+  .totalAmountContainer {
+    .totalAmount {
+      background-color: $light-color;
+      padding: 20px;
+      border-radius: 8px;
+      > p {
+        font-size: 2vw;
+        color: $accent-color;
+      }
+
+      > span {
+        color: $accent-color;
+        font-weight: 500;
+      }
+    }
+
+    .amountInWords {
+      margin: 15px 0;
+      p {
+        font-size: 16px;
+        color: $dark-color;
+        font-weight: 550;
+      }
+
+      span {
+        font-size: 14px;
+        color: $accent-color;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .certification {
+    margin: 150px 0;
+    display: flex;
+    justify-content: flex-end;
+
+    .c-text {
+      display: flex;
+      flex-direction: column;
+
+      .signature {
+        margin-top: 80px;
+
+        > p {
+          font-size: 16px;
+          border-top: 2px solid $dark-color;
+          padding-top: 20px;
+        }
+      }
+    }
+  }
+}
+
+.invoice-row {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.date {
+  input {
+    background-color: white;
+    padding: 0  ;
+  }
+}

@@ -1,0 +1,13 @@
+@import "../../../style.scss";
+
+#leads-settings {
+    .actions-row {
+        justify-content: space-between;
+
+        > input {
+            background-color: white;
+            width: 90%;
+            padding: 8px;
+        }
+    }
+}
