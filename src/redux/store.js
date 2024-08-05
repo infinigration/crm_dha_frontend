@@ -12,7 +12,7 @@ import { vendorReducer } from "./reducers/vendorReducer";
 import { bankReducer } from "./reducers/bankReducer";
 import { otherReducer } from "./reducers/otherReducer";
 
-export const server = "https://infinigration-crm-backend.onrender.com/api/v1";
+export const server = "http://31.220.18.246:4000/api/v1/";
 export const store = configureStore({
   reducer: {
     user: authReducer,
