@@ -27,7 +27,7 @@ const Vendor = () => {
       toast.success(message);
       dispatch({ type: "clearMessage" });
       setName("");
-    
+
     }
   }, [error, message]);
 
@@ -41,17 +41,10 @@ const Vendor = () => {
     <Loader />
   ) : (
     <section className="section" id="vendor">
+      
       <div className="actions-row">
         <input type="text" placeholder="Search Vendor" />
-        <form action="" onSubmit={submitHandler}>
-          <input
-            type="text"
-            placeholder="Enter Vendor Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <button className="primary-btn">Add</button>
-        </form>
+        <Link to="/admin/vendor/add">Add</Link>
       </div>
 
       <table>
@@ -66,12 +59,12 @@ const Vendor = () => {
         <tbody>
           {vendors && vendors.length > 0
             ? vendors.map((v, index) => (
-                <tr>
-                  <td>{index + 1}</td>
-                  <td>{v.name}</td>
-                  <td><Link>View</Link></td>
-                </tr>
-              ))
+              <tr>
+                <td>{index + 1}</td>
+                <td>{v.name}</td>
+                <td><Link>View</Link></td>
+              </tr>
+            ))
             : ""}
         </tbody>
       </table>

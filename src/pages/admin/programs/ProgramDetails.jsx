@@ -24,32 +24,32 @@ const ProgramDetails = () => {
 
         <div className="feild">
           <h3>Total Cost</h3>
-          <p>{filteredProgram.generalInformation[0].totalCost} Lacs</p>
+          <p>{filteredProgram.generalInformation[0].totalCost}</p>
         </div>
 
         <div className="feild">
           <h3>Advance (1st Installement)</h3>
-          <p>{filteredProgram.generalInformation[0].advance} Lacs</p>
+          <p>{filteredProgram.generalInformation[0].advance}</p>
         </div>
 
         <div className="feild">
           <h3>Work Permit (2nd Installement)</h3>
-          <p>{filteredProgram.generalInformation[0].workPermit} Lacs</p>
+          <p>{filteredProgram.generalInformation[0].workPermit}</p>
         </div>
 
         <div className="feild">
           <h3>Passport Request (3rd Installement)</h3>
-          <p>{filteredProgram.generalInformation[0].passportRequest} Lacs</p>
+          <p>{filteredProgram.generalInformation[0].passportRequest}</p>
         </div>
 
         <div className="feild">
           <h3>Visa Cost</h3>
-          <p>{filteredProgram.generalInformation[0].visaCost} Lacs</p>
+          <p>{filteredProgram.generalInformation[0].visaCost}</p>
         </div>
 
         <div className="feild">
           <h3>Deduction</h3>
-          <p>{filteredProgram.generalInformation[0].deduction} Lacs</p>
+          <p>{filteredProgram.generalInformation[0].deduction}</p>
         </div>
 
         <div className="feild">
@@ -69,7 +69,7 @@ const ProgramDetails = () => {
         {filteredProgram.jobs.map((j) => (
           <div className="feild">
             <h3>{j.title}</h3>
-            <p>{j.salary} PKR</p>
+            <p>{j.salary}</p>
           </div>
         ))}
       </div>

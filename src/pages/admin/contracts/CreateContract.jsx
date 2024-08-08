@@ -11,67 +11,65 @@ import { getAllVendors } from "../../../redux/actions/vendor";
 import { getAllBanks } from "../../../redux/actions/bank";
 
 const CreateContract = () => {
-  const [installments, setInstallments] = useState([
-    { amount: "", stage: "", remarks: "" },
-  ]);
+
+  const [installments, setInstallments] = useState([{ amount: "", stage: "", remarks: "" }]);
+  const [bank, setBank] = useState(null);
+  const [lead, setLead] = useState(null);
+  const [program, setProgram] = useState(null);
+  const [subAgent, setSubAgent] = useState("");
+  const [subAgentPercentage, setSubAgentPercentage] = useState("");
+  const [discount, setDiscount] = useState("");
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAllPrograms());
-    dispatch(getAllLeads());
-  }, [dispatch]);
+  const navigate = useNavigate();
+  const params = useParams();
 
   const { leads } = useSelector((state) => state.leads);
   const { programs } = useSelector((state) => state.program);
+  const { vendors } = useSelector((state) => state.vendor);
+  const { banks } = useSelector((state) => state.bank);
   const { loading, message, error } = useSelector((state) => state.contract);
 
-  const params = useParams();
-  const navigate = useNavigate();
-
-  const [program, setProgram] = useState(
-    leads && leads.leads.length > 0 && params.id !== undefined
-      ? leads.leads
-          .filter((l) => l._id === params.id)
-          .map((l) => ({
-            value: l.client.program && l.client.program._id,
-            label:
-              l.client.program &&
-              l.client.program.generalInformation[0].country,
-          }))
-      : []
-  );
-
-  const [lead, setLead] = useState(
-    leads && leads.leads.length > 0 && params.id !== undefined
-      ? leads.leads
-          .filter((l) => l._id === params.id)
-          .map((l) => ({
-            value: l._id,
-            label: l.client.name,
-          }))
-      : []
-  );
-
   useEffect(() => {
+    dispatch(getAllPrograms());
+    dispatch(getAllLeads());
     dispatch(getAllVendors());
     dispatch(getAllBanks());
-  }, []);
+  }, [dispatch]);
 
-  const { vendors } = useSelector((state) => state.vendor);
+  useEffect(() => {
+    if (params.id) {
 
-  const [vendor, setVendor] = useState("");
-  const [subAgent, setSubAgent] = useState("");
+      const selectedLead = leads?.leads.find((l) => l._id === params.id);
+      if (selectedLead) {
+        setLead({ value: selectedLead._id, label: selectedLead.client.name });
+        setProgram({
+          value: selectedLead.client.program?._id,
+          label: selectedLead.client.program?.generalInformation[0].country,
+        });
+      }
+    }
+  }, [params.id, leads]);
 
-  const [vendorPercentage, setVendorPercentage] = useState("");
-  const [subAgentPercentage, setSubAgentPercentage] = useState("");
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+      dispatch({ type: "clearMessage" });
+      navigate("/admin/contracts");
+    }
+
+    if (error) {
+      toast.error(error);
+      dispatch({ type: "clearError" });
+    }
+  }, [message, error, dispatch, navigate]);
 
   const handleAddInstallment = () => {
     setInstallments([...installments, { amount: "", stage: "", remarks: "" }]);
   };
 
   const handleRemoveInstallment = (index) => {
-    const newInstallments = installments.filter((_, i) => i !== index);
-    setInstallments(newInstallments);
+    setInstallments(installments.filter((_, i) => i !== index));
   };
 
   const handleInstallmentChange = (index, field, value) => {
@@ -83,114 +81,84 @@ const CreateContract = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    // console.log(lead.value, program.value, installments, bank.value);
-    // console.log("Bank:", bank.value);
+    if (!lead || !program || !bank) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
 
-    dispatch(
-      createContract(lead.value, bank.value, program.value, installments)
-    );
+    const parsedDiscount = Number(discount);
+    if (isNaN(parsedDiscount)) {
+      toast.error("Discount must be a number");
+      return;
+    }
+
+    const parsedInstallments = installments.map((installment, index) => {
+      const amount = Number(installment.amount);
+      if (isNaN(amount)) {
+        toast.error(`Installment ${index + 1}: Amount must be a number`);
+        return null;
+      }
+      return { ...installment, amount };
+    });
+
+    if (parsedInstallments.includes(null)) {
+      return;
+    }
+
+
+    dispatch(createContract(lead.value, program.value, bank.value, parsedInstallments, parsedDiscount));
   };
 
-  const leadOptions =
-    leads && leads.leads.length > 0
-      ? leads.leads.map((l) => ({
-          value: l._id,
-          label: l.client.name,
-        }))
-      : [];
+  const leadOptions = leads?.leads.map((l) => ({ value: l._id, label: l.client.name })) || [];
+  const programOptions = programs?.map((p) => ({
+    value: p._id,
+    label: p.generalInformation[0].country,
+  })) || [];
+  const vendorOptions = vendors?.map((v) => ({ value: v._id, label: v.name })) || [];
+  const bankOptions = banks?.map((b) => ({ value: b._id, label: `${b.title}-${b.accNo}` })) || [];
 
-  const vendorOptions =
-    vendors && vendors.length > 0
-      ? vendors.map((v, index) => ({
-          value: v._id,
-          label: v.name,
-        }))
-      : [];
-  const subAgentOptions = [];
 
-  const programOptions =
-    programs && programs.length > 0
-      ? programs.map((p) => ({
-          value: p._id,
-          label: p.generalInformation[0].country,
-        }))
-      : [];
 
-  useEffect(() => {
-    if (message) {
-      toast.success(message);
-      dispatch({
-        type: "clearMessage",
-      });
-
-      navigate("/admin/contracts");
-    }
-
-    if (error) {
-      toast.error(error);
-      dispatch({
-        type: "clearError",
-      });
-    }
-  }, [error, message, dispatch, navigate]);
-
-  let { banks } = useSelector((state) => state.bank);
-  let bankOptions =
-    banks && banks.length > 0
-      ? banks.map((b) => ({
-          value: b._id,
-          label: `${b.title}-${b.accNo}`,
-        }))
-      : [];
-
-  const [bank, setBank] = useState("");
-  return loading || !banks ? (
+  return loading ? (
     <Loader />
   ) : (
     <section className="section" id="create-contract">
-      <form action="" onSubmit={submitHandler}>
+      <form onSubmit={submitHandler}>
         <h2 className="heading">Create Contract</h2>
+
         <Select
           placeholder="Choose Bank"
           options={bankOptions}
-          value={bank}
-          defaultInputValue={bank}
           onChange={setBank}
-        ></Select>
+          value={bank}
+          isClearable
+        />
         <Select
           placeholder="Choose Lead"
           options={leadOptions}
           onChange={setLead}
           value={lead}
-          defaultValue={lead}
+          isClearable
         />
         <Select
           placeholder="Choose Program"
           options={programOptions}
           onChange={setProgram}
           value={program}
-          defaultValue={program}
-        />
-
-        <Select
-          placeholder="Choose Vendor"
-          options={vendorOptions}
-          onChange={setVendor}
-          value={vendor}
-          defaultValue={vendor}
+          isClearable
         />
         <input
-          type="text"
-          placeholder="Vendor Percentage"
-          value={vendorPercentage}
-          onChange={(e) => setVendorPercentage(e.target.value)}
+          type="number"
+          placeholder="Discount"
+          value={discount}
+          onChange={(e) => setDiscount(e.target.value)}
         />
         <Select
           placeholder="Choose SubAgent"
-          options={subAgentOptions}
+          options={vendorOptions} // Assuming subAgentOptions will be populated similarly
           onChange={setSubAgent}
           value={subAgent}
-          defaultValue={subAgent}
+          isClearable
         />
         <input
           type="text"
@@ -201,11 +169,7 @@ const CreateContract = () => {
 
         <h2 className="heading">Installments</h2>
         <div className="installments-container">
-          <button
-            type="button"
-            className="primary-btn"
-            onClick={handleAddInstallment}
-          >
+          <button type="button" className="primary-btn" onClick={handleAddInstallment}>
             Add Installment
           </button>
           {installments.map((installment, index) => (
@@ -214,37 +178,29 @@ const CreateContract = () => {
                 type="number"
                 placeholder="Enter Amount"
                 value={installment.amount}
-                onChange={(e) =>
-                  handleInstallmentChange(index, "amount", e.target.value)
-                }
+                onChange={(e) => handleInstallmentChange(index, "amount", e.target.value)}
               />
               <input
                 type="text"
                 placeholder="Enter Stage"
                 value={installment.stage}
-                onChange={(e) =>
-                  handleInstallmentChange(index, "stage", e.target.value)
-                }
+                onChange={(e) => handleInstallmentChange(index, "stage", e.target.value)}
               />
               <textarea
                 placeholder="Enter Remarks"
                 value={installment.remarks}
-                onChange={(e) =>
-                  handleInstallmentChange(index, "remarks", e.target.value)
-                }
+                onChange={(e) => handleInstallmentChange(index, "remarks", e.target.value)}
               />
-              <button
-                type="button"
-                className="danger-btn"
-                onClick={() => handleRemoveInstallment(index)}
-              >
+              <button type="button" className="danger-btn" onClick={() => handleRemoveInstallment(index)}>
                 Remove
               </button>
             </div>
           ))}
         </div>
 
-        <button className="primary-btn">Submit</button>
+        <button type="submit" className="primary-btn">
+          Submit
+        </button>
       </form>
     </section>
   );

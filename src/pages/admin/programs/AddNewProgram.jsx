@@ -8,7 +8,8 @@ import Loader from "../../loader/Loader";
 import { createProgram } from "../../../redux/actions/program";
 import { toast } from "react-hot-toast";
 
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { getAllVendors } from "../../../redux/actions/vendor";
 const AddNewProgram = () => {
   const [country, setCountry] = useState();
   const [duration, setDuration] = useState();
@@ -20,6 +21,9 @@ const AddNewProgram = () => {
   const [deduction, setDeduction] = useState();
   const [province, setProvince] = useState();
   const [processDuration, setProcessDuration] = useState();
+  const [vendor, setVendor] = useState();
+  const [vendorAmount, setVendorAmount] = useState()
+  const [vendorCurrency, setVendorCurrency] = useState()
 
   const [value, setValue] = useState("");
   const options = useMemo(() => countryList().getData(), []);
@@ -119,6 +123,26 @@ const AddNewProgram = () => {
     newBenefits.splice(index, 1);
     setBenefits(newBenefits);
   };
+
+  useEffect(() => {
+    dispatch(getAllVendors())
+  }, [])
+
+  let { vendors } = useSelector(state => state.vendor)
+  const vendorOptions = vendors && vendors.length > 0 ? vendors.map((v) => ({
+    value: v._id,
+    label: v.name,
+  })) : [{ value: "", label: "" }]
+
+
+  let vendorCurrencyOptions = [
+    { value: "$", label: "USD" },
+    { value: "€", label: "Euro" },
+  ]
+
+
+
+
   const dispatch = useDispatch();
 
   const submitHandler = (e) => {
@@ -139,11 +163,17 @@ const AddNewProgram = () => {
         jobs,
         documents,
         requirements,
-        benefits
+        benefits,
+        vendor.value,
+        vendorAmount,
+        vendorCurrency.value
       )
     );
   };
+
+
   const { loading, error, message } = useSelector((state) => state.program);
+
   const navigate = useNavigate();
   useEffect(() => {
     if (message) {
@@ -163,6 +193,7 @@ const AddNewProgram = () => {
   ) : (
     <section className="section" id="add-new-program">
       <form action="" onSubmit={submitHandler}>
+
         <div className="general-information">
           <h3>Gernal Information</h3>
           <div className="l-i">
@@ -389,6 +420,37 @@ const AddNewProgram = () => {
                 </button>
               </div>
             ))}
+          </div>
+        </div>
+
+
+        <div className="jobs-available">
+          <div className="heading-row">
+            <h3>Vendor Details</h3>
+          </div>
+
+          <div className="l-i">
+            <label htmlFor="">Vendor</label>
+            <Select placeholder="Choose Vendor"
+              value={vendor} defaultInputValue={vendor} onChange={setVendor} options={vendorOptions}>
+            </Select>
+          </div>
+
+          <div className="l-i">
+            <label htmlFor="">Vendor Currency</label>
+            <Select placeholder="Vendor Currency"
+              value={vendorCurrency} defaultInputValue={vendorCurrency} onChange={setVendorCurrency} options={vendorCurrencyOptions}>
+            </Select>
+          </div>
+
+          <div className="l-i">
+            <label htmlFor="">Vendor Amount</label>
+            <input
+              type="text"
+              placeholder="100"
+              value={vendorAmount}
+              onChange={(e) => setVendorAmount(e.target.value)}
+            />
           </div>
         </div>
 

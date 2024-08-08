@@ -2,17 +2,23 @@ import axios from "axios";
 import { server } from "../store";
 
 export const createContract =
-  (lead, bank, program, installements) => async (dispatch) => {
+  (lead, program, bank, installements, discount) => async (dispatch) => {
     dispatch({ type: "createContractRequest" });
 
+    // lead,
+    // program,
+    // bank,
+    // installments,
+    // discount,
     try {
       const { data } = await axios.post(
         `${server}/create_contract`,
         {
           lead,
-          bank,
           program,
+          bank,
           installements,
+          discount,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -23,7 +29,7 @@ export const createContract =
       dispatch({ type: "createContractSuccess", payload: data });
     } catch (error) {
       dispatch({
-        type: "createContractFail",
+        type: "getAllContractFail",
         payload: error.response.data.message,
       });
     }

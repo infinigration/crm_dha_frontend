@@ -16,7 +16,10 @@ export const createProgram =
     jobs,
     documents,
     requirements,
-    benefits
+    benefits,
+    vendor,
+    vendorFees,
+    currency
   ) =>
   async (dispatch) => {
     dispatch({ type: "createProgramRequest" });
@@ -39,6 +42,9 @@ export const createProgram =
           documents,
           requirements,
           benefits,
+          vendor,
+          vendorFees,
+          currency
         },
         {
           headers: { "Content-Type": "application/json" },

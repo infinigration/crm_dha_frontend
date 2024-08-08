@@ -60,6 +60,7 @@ import Banks from "./pages/admin/finances/Banks";
 import AddNewBank from "./pages/admin/finances/AddNewBank";
 import EmployeePayroll from "./pages/admin/finances/EmployeePayroll";
 import Incomings from "./pages/admin/finances/Incomings";
+import AddNewVendor from "./pages/admin/settings/vendors/AddNewVendor";
 
 const App = () => {
   const locomotiveScroll = new LocomotiveScroll();
@@ -925,6 +926,25 @@ const App = () => {
           />
 
           <Route
+            path="/admin/vendors/add"
+            element={
+              <ProtectedRoute
+                isAuthenticated={isAuthenticated}
+                adminRoute={true}
+                isAdmin={user && user.role === "admin"}
+                redirect="/"
+                redirectAdmin="/"
+              >
+                <Sidebar
+                  navLists={routes}
+                  component={AddNewVendor}
+                  pageTitle="Add New Vendor"
+                />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
             path="/admin/finances/vendor-payments"
             element={
               <ProtectedRoute
@@ -954,10 +974,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                      ? salesRoutes
-                      : isAuthenticated && user.job.department === "operations"
-                      ? operationRoutes
-                      : routes
+                        ? salesRoutes
+                        : isAuthenticated && user.job.department === "operations"
+                          ? operationRoutes
+                          : routes
                   }
                   component={Profile}
                 />
@@ -977,10 +997,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                      ? salesRoutes
-                      : isAuthenticated && user.job.department === "operations"
-                      ? operationRoutes
-                      : routes
+                        ? salesRoutes
+                        : isAuthenticated && user.job.department === "operations"
+                          ? operationRoutes
+                          : routes
                   }
                   component={Leads}
                   pageTitle="Leads"
@@ -1001,10 +1021,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                      ? salesRoutes
-                      : isAuthenticated && user.job.department === "operations"
-                      ? operationRoutes
-                      : routes
+                        ? salesRoutes
+                        : isAuthenticated && user.job.department === "operations"
+                          ? operationRoutes
+                          : routes
                   }
                   component={Contracts}
                   pageTitle="Contracts"
@@ -1025,10 +1045,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                      ? salesRoutes
-                      : isAuthenticated && user.job.department === "operations"
-                      ? operationRoutes
-                      : routes
+                        ? salesRoutes
+                        : isAuthenticated && user.job.department === "operations"
+                          ? operationRoutes
+                          : routes
                   }
                   component={AddLeads}
                   pageTitle="Create Lead"
@@ -1049,10 +1069,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                      ? salesRoutes
-                      : isAuthenticated && user.job.department === "operations"
-                      ? operationRoutes
-                      : routes
+                        ? salesRoutes
+                        : isAuthenticated && user.job.department === "operations"
+                          ? operationRoutes
+                          : routes
                   }
                   component={LeadActivities}
                   pageTitle="Create Lead"
@@ -1073,10 +1093,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                      ? salesRoutes
-                      : isAuthenticated && user.job.department === "operations"
-                      ? operationRoutes
-                      : routes
+                        ? salesRoutes
+                        : isAuthenticated && user.job.department === "operations"
+                          ? operationRoutes
+                          : routes
                   }
                   component={Remarks}
                   pageTitle="Remarks"
@@ -1097,10 +1117,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                      ? salesRoutes
-                      : isAuthenticated && user.job.department === "operations"
-                      ? operationRoutes
-                      : routes
+                        ? salesRoutes
+                        : isAuthenticated && user.job.department === "operations"
+                          ? operationRoutes
+                          : routes
                   }
                   component={LeadActivities}
                   pageTitle="Remarks"
