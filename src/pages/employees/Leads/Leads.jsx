@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   assignLead,
+  deleteLead,
   forwardLead,
   getAllLeads,
 } from "../../../redux/actions/leads";
@@ -107,7 +108,7 @@ const Leads = () => {
     }
   };
 
-  const filteredLeads = leads && leads.leads.filter((l) => {
+  const filteredLeads = leads && leads.leads && leads.leads.filter((l) => {
     if (filterOption === "assigned") {
       return l.assignedTo !== "";
     } else if (filterOption === "unassigned") {
@@ -116,6 +117,11 @@ const Leads = () => {
     return true; // "all" leads
   });
 
+
+  const clickHandler = (e) => {
+    e.preventDefault()
+    dispatch(deleteLead(e.target.id))
+  }
   return loading || !leads ? (
     <Loader />
   ) : (
@@ -179,7 +185,7 @@ const Leads = () => {
         </thead>
 
         <tbody>
-          {filteredLeads.map((l, index) => (
+          {filteredLeads && filteredLeads.length > 0 && filteredLeads.map((l, index) => (
             <tr key={index}>
               {auth && auth.user.job.department === "marketing" && (
                 <td>
@@ -247,6 +253,7 @@ const Leads = () => {
                 )}
 
                 <Link to={`/editlead/${l._id}`}>Edit</Link>
+                <button onClick={clickHandler} id={l._id} >Delete</button>
               </td>
             </tr>
           ))}

@@ -52,6 +52,32 @@ export const leadsReducer = createReducer(
       state.error = action.payload;
     },
 
+    deleteLeadStatusRequest: (state) => {
+      state.loading = true;
+    },
+    deleteLeadStatusSuccess: (state, action) => {
+      state.loading = false;
+      state.leads = action.payload;
+      state.message = action.payload.message;
+    },
+    deleteLeadStatusFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    updateLeadRequest: (state) => {
+      state.loading = true;
+    },
+    updateLeadSuccess: (state, action) => {
+      state.loading = false;
+      state.leads = action.payload;
+      state.message = action.payload.message;
+    },
+    updateLeadFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
     getTasksSummaryRequest: (state) => {
       state.loading = true;
     },

@@ -84,6 +84,52 @@ export const updateLeadStatus = (id, status) => async (dispatch) => {
   }
 };
 
+export const updateLead =
+  (id, name, city, phone, campaign, source) => async (dispatch) => {
+    dispatch({ type: "updateLeadRequest" });
+
+    try {
+      const { data } = await axios.put(
+        `${server}/updatelead/${id}`,
+        { name, city, phone, campaign, source },
+
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+
+      dispatch({ type: "updateLeadSuccess", payload: data });
+    } catch (error) {
+      dispatch({
+        type: "updateLeadFail",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+export const deleteLead = (id) => async (dispatch) => {
+  dispatch({ type: "deleteLeadRequest" });
+
+  try {
+    const { data } = await axios.delete(
+      `${server}/lead/${id}`,
+
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+
+    dispatch({ type: "deleteLeadSuccess", payload: data });
+  } catch (error) {
+    dispatch({
+      type: "deleteLeadFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
 export const getTaskSummary = (id, status) => async (dispatch) => {
   dispatch({ type: "getTasksSummaryRequest" });
 
