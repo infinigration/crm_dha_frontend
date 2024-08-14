@@ -9,7 +9,6 @@ import Loader from "../../../loader/Loader";
 const Vendor = () => {
   const [name, setName] = useState("");
   const dispatch = useDispatch();
-
   const { error, message, loading, vendors } = useSelector(
     (state) => state.vendor
   );
@@ -17,6 +16,7 @@ const Vendor = () => {
   useEffect(() => {
     dispatch(getAllVendors());
   }, [message]);
+
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -36,15 +36,14 @@ const Vendor = () => {
     dispatch(createVendor(name));
   };
 
-  console.log(vendors);
   return loading ? (
     <Loader />
   ) : (
     <section className="section" id="vendor">
-      
+
       <div className="actions-row">
         <input type="text" placeholder="Search Vendor" />
-        <Link to="/admin/vendor/add">Add</Link>
+        <Link className="primary-btn" to="/admin/vendors/add">Add</Link>
       </div>
 
       <table>
@@ -52,7 +51,10 @@ const Vendor = () => {
           <tr>
             <th>Sr</th>
             <th>Name</th>
-            <th>Actions</th>
+            <th>Program</th>
+            <th>Amount</th>
+            <th>Currency</th>
+
           </tr>
         </thead>
 
@@ -62,7 +64,9 @@ const Vendor = () => {
               <tr>
                 <td>{index + 1}</td>
                 <td>{v.name}</td>
-                <td><Link>View</Link></td>
+                <td>{v.program.generalInformation[0].country}</td>
+                <td>{v.amount}</td>
+                <td>{v.currency}</td>
               </tr>
             ))
             : ""}

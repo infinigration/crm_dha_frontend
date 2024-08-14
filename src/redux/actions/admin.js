@@ -16,6 +16,7 @@ export const createUser =
     title,
     department,
     salary,
+    joiningDate,
     role,
     password
   ) =>
@@ -39,8 +40,9 @@ export const createUser =
           title,
           department,
           salary,
+          joiningDate,
           role,
-          password
+          password,
         },
         {
           headers: { "Content-Type": "application/json" },

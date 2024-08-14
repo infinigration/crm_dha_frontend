@@ -1,28 +1,29 @@
 import axios from "axios";
 import { server } from "../store";
 
-export const createVendor = (name) => async (dispatch) => {
-  dispatch({ type: "createVendorRequest" });
+export const createVendor =
+  (name, program, amount, currency) => async (dispatch) => {
+    dispatch({ type: "createVendorRequest" });
 
-  try {
-    const { data } = await axios.post(
-      `${server}/create-vendor`,
-      { name },
+    try {
+      const { data } = await axios.post(
+        `${server}/create-vendor`,
+        { name, program, amount, currency },
 
-      {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      }
-    );
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
-    dispatch({ type: "createVendorSuccess", payload: data });
-  } catch (error) {
-    dispatch({
-      type: "createVendorFail",
-      payload: error.response.data.message,
-    });
-  }
-};
+      dispatch({ type: "createVendorSuccess", payload: data });
+    } catch (error) {
+      dispatch({
+        type: "createVendorFail",
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 export const getAllVendors = () => async (dispatch) => {
   dispatch({ type: "getAllVendorsRequest" });
@@ -59,7 +60,10 @@ export const getAllVendorsPayment = () => async (dispatch) => {
       }
     );
 
-    dispatch({ type: "getAllVendorPaymentsSuccess", payload: data.vendorPayments });
+    dispatch({
+      type: "getAllVendorPaymentsSuccess",
+      payload: data.vendorPayments,
+    });
   } catch (error) {
     dispatch({
       type: "getAllVendorPaymentsFail",

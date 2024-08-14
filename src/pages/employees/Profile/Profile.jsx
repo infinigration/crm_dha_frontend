@@ -40,7 +40,7 @@ const Profile = () => {
           />
           <p className="date-joined">
             <span>Date Joined: </span>
-            {auth.user.createdAt.split("T")[0]}
+            {auth.user.job.joningDate || "Nill"}
           </p>
         </div>
       </div>
@@ -92,7 +92,7 @@ const Profile = () => {
         <input
           type="text"
           placeholder="D.O.B"
-          value={dob}
+          value={dob.split("T")[0]}
           onChange={(e) => setDob(e.target.value)}
         />
         <label>Marital Status:</label>

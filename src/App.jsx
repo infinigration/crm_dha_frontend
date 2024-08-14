@@ -61,6 +61,7 @@ import AddNewBank from "./pages/admin/finances/AddNewBank";
 import EmployeePayroll from "./pages/admin/finances/EmployeePayroll";
 import Incomings from "./pages/admin/finances/Incomings";
 import AddNewVendor from "./pages/admin/settings/vendors/AddNewVendor";
+import EditLead from "./pages/employees/Leads/EditLead";
 
 const App = () => {
   const locomotiveScroll = new LocomotiveScroll();
@@ -1004,6 +1005,30 @@ const App = () => {
                   }
                   component={Leads}
                   pageTitle="Leads"
+                />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/editlead/:id"
+            element={
+              <ProtectedRoute
+                isAuthenticated={isAuthenticated}
+                redirectAdmin="/"
+              >
+                <Sidebar
+                  navLists={
+                    isAuthenticated && user.job.department === "marketing"
+                      ? marketingRoutes
+                      : isAuthenticated && user.job.department === "sales"
+                        ? salesRoutes
+                        : isAuthenticated && user.job.department === "operations"
+                          ? operationRoutes
+                          : routes
+                  }
+                  component={EditLead}
+                  pageTitle="Edit Lead"
                 />
               </ProtectedRoute>
             }

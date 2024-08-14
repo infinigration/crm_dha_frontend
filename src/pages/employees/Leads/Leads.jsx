@@ -16,6 +16,10 @@ const Leads = () => {
   const [isFOpen, setFOpen] = useState(null); // State to track which row's "Assign Lead" form is open
   const [forward, setForward] = useState("");
   const [forwardl, setForwardl] = useState("");
+  const [selectedLeads, setSelectedLeads] = useState([]); // State for selected leads
+  const [bulkAssign, setBulkAssign] = useState(""); // State for bulk assign
+  const [filterOption, setFilterOption] = useState("all"); // State for lead filter
+
   const { employees } = useSelector((state) => state.admin);
   const { auth } = useSelector((state) => state.user);
   const { loading, error, message, leads } = useSelector(
@@ -37,7 +41,7 @@ const Leads = () => {
   useEffect(() => {
     dispatch(getEmployees());
     dispatch(getAllLeads());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (error) {
@@ -48,27 +52,35 @@ const Leads = () => {
       toast.success(message);
       dispatch({ type: "clearMessage" });
     }
-  }, [error, message, loading]);
+  }, [error, message, dispatch]);
 
   const forwardLeadOptions = employees
     ? employees
-        .filter((e) => e._id !== auth.user._id && e.job.department === "sales")
-        .map((e) => ({
-          value: e._id,
-          label: `${e.bioData.name}, (${e.job.department})`,
-        }))
+      .filter((e) => e._id !== auth.user._id && e.job.department === "sales")
+      .map((e) => ({
+        value: e._id,
+        label: `${e.bioData.name}, (${e.job.department})`,
+      }))
     : [];
 
   const operationOptions = employees
     ? employees
-        .filter(
-          (e) => e._id !== auth.user._id && e.job.department === "operations"
-        )
-        .map((e) => ({
-          value: e._id,
-          label: `${e.bioData.name}, (${e.job.department})`,
-        }))
+      .filter(
+        (e) => e._id !== auth.user._id && e.job.department === "operations"
+      )
+      .map((e) => ({
+        value: e._id,
+        label: `${e.bioData.name}, (${e.job.department})`,
+      }))
     : [];
+
+  const handleLeadSelect = (leadId) => {
+    setSelectedLeads((prevSelectedLeads) =>
+      prevSelectedLeads.includes(leadId)
+        ? prevSelectedLeads.filter((id) => id !== leadId)
+        : [...prevSelectedLeads, leadId]
+    );
+  };
 
   const assignSubmitHandler = (e, id) => {
     e.preventDefault();
@@ -82,166 +94,164 @@ const Leads = () => {
     setFOpen(false);
   };
 
-  console.log(auth.user.assignedLeads);
+  const bulkAssignHandler = (e) => {
+    e.preventDefault();
+    if (selectedLeads.length > 0) {
+      selectedLeads.forEach((leadId) => {
+        dispatch(assignLead(leadId, bulkAssign.value));
+      });
+      setSelectedLeads([]); // Clear selected leads after assigning
+      setBulkAssign(""); // Clear bulk assign selection
+    } else {
+      toast.error("No leads selected");
+    }
+  };
+
+  const filteredLeads = leads && leads.leads.filter((l) => {
+    if (filterOption === "assigned") {
+      return l.assignedTo !== "";
+    } else if (filterOption === "unassigned") {
+      return l.assignedTo === "";
+    }
+    return true; // "all" leads
+  });
 
   return loading || !leads ? (
     <Loader />
   ) : (
     <section className="section" id="e_leads">
-      {auth && auth.user.job.department === "marketing" ? (
-        <div className="actions-row">
-          <Link className="primary-btn" to={"/leads/add"}>
-            Add New
-          </Link>
-        </div>
-      ) : (
-        ""
-      )}
-
-      {auth && auth.user.job.department === "sales" && (
-        <table>
-          <thead>
-            <tr>
-              <th>Sr</th>
-              <th>Name</th>
-              <th>Program Selected</th>
-              <th>Created At</th>
-              <th>Delayed by</th>
-              <th>Status</th>
-              <th>Source</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {auth.user.assignedLeads && auth.user.assignedLeads.length > 0
-              ? auth.user.assignedLeads.map((l, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{l.client && l.client.name}</td>
-                    <td>{l.client && l.client.program}</td>
-                    <td>{l.client && l.createdAt.split("T")[0]}</td>
-                    <td>Nill</td>
-                    <td>{l.status}</td>
-                    <td>{l.source}</td>
-                    <td className="act-row">
-                      {/* Display "Forward Lead" button for sales department */}
-                      <button onClick={() => setFOpen(!isFOpen)}>
-                        Forward Lead
-                      </button>
-
-                      <form
-                        action=""
-                        onSubmit={(e) => {
-                          forwardLeadHandler(e, l._id);
-                        }}
-                        style={{ display: isFOpen ? "flex" : "none" }}
-                      >
-                        <Select
-                          placeholder="Choose Person"
-                          options={operationOptions}
-                          value={forwardl}
-                          onChange={setForwardl}
-                        />
-                        <button>Apply</button>
-                      </form>
-
-                      <Link to={`/leads/remarks/${l._id}`}>Add Remarks</Link>
-                    </td>
-                  </tr>
-                ))
-              : ""}
-          </tbody>
-        </table>
-      )}
-
+      {/* Bulk Assign Form */}
       {auth && auth.user.job.department === "marketing" && (
-        <table>
-          <thead>
-            <tr>
-              <th>Sr</th>
-              <th>Name</th>
-              <th>Program Selected</th>
-              <th>Created At</th>
-              <th>Delayed by</th>
-              <th>Status</th>
-              <th>Source</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+        <>
+          <div className="actions-row">
+            <Link className="primary-btn" to={"/leads/add"}>
+              Add New
+            </Link>
+          </div>
 
-          <tbody>
-            {leads.leads.map((l, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{l.client.name}</td>
+
+          <div className="extra-actions-row">
+            <form className="bulk-assign-lead" onSubmit={bulkAssignHandler}>
+              <Select
+                className="select"
+                placeholder="Bulk Assign Leads"
+                options={forwardLeadOptions}
+                value={bulkAssign}
+                onChange={setBulkAssign}
+              />
+              <button type="submit">Bulk Assign</button>
+            </form>
+
+            <div className="f-leads">
+              <Select
+                className="select"
+                placeholder="Filter Leads"
+                options={[
+                  { value: "all", label: "All Leads" },
+                  { value: "assigned", label: "Assigned Leads" },
+                  { value: "unassigned", label: "Unassigned Leads" },
+                ]}
+                value={{ value: filterOption, label: filterOption.charAt(0).toUpperCase() + filterOption.slice(1) + " Leads" }}
+                onChange={(selectedOption) => setFilterOption(selectedOption.value)}
+              />
+            </div>
+          </div>
+        </>
+      )}
+
+
+
+      <table>
+        <thead>
+          <tr>
+            {auth && auth.user.job.department === "marketing" && (
+              <th>Select</th>
+            )}
+            <th>Sr</th>
+            <th>Name</th>
+            <th>Program Selected</th>
+            <th>Created At</th>
+            <th>Delayed by</th>
+            <th>Status</th>
+            <th>Source</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {filteredLeads.map((l, index) => (
+            <tr key={index}>
+              {auth && auth.user.job.department === "marketing" && (
                 <td>
-                  {l.client.program
-                    ? l.client.program.generalInformation[0].country
-                    : "Not Selected Yet"}
+                  <input
+                    type="checkbox"
+                    checked={selectedLeads.includes(l._id)}
+                    onChange={() => handleLeadSelect(l._id)}
+                  />
                 </td>
-                <td>{l.createdAt.split("T")[0]}</td>
-                <td>Nill</td>
-                <td>{l.status}</td>
-                <td>{l.source}</td>
-                <td className="act-row">
-                  {/* Display "Assign Lead" button for marketing department */}
-                  <button onClick={() => setFOpen(index)}>Assign Lead</button>
-
-                  {/* Conditional rendering of form based on isFOpen */}
-                  {isFOpen === index && (
-                    <form onSubmit={(e) => assignSubmitHandler(e, l._id)}>
+              )}
+              <td>{index + 1}</td>
+              <td>{l.client.name}</td>
+              <td>
+                {l.client.program
+                  ? l.client.program.generalInformation[0].country
+                  : "Not Selected Yet"}
+              </td>
+              <td>{l.createdAt.split("T")[0]}</td>
+              <td>Nill</td>
+              <td>{l.status}</td>
+              <td>{l.source}</td>
+              <td className="act-row">
+                {auth.user.job.department === "sales" && (
+                  <>
+                    <button onClick={() => setFOpen(!isFOpen)}>
+                      Forward Lead
+                    </button>
+                    <form
+                      action=""
+                      onSubmit={(e) => forwardLeadHandler(e, l._id)}
+                      style={{ display: isFOpen ? "flex" : "none" }}
+                    >
                       <Select
-                        placeholder="Assign Leads"
-                        options={forwardLeadOptions}
-                        value={forward}
-                        onChange={setForward}
+                        placeholder="Choose Person"
+                        options={operationOptions}
+                        value={forwardl}
+                        onChange={setForwardl}
                       />
-                      <button type="submit">Apply</button>
+                      <button>Apply</button>
                     </form>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+                  </>
+                )}
 
-      {auth && auth.user.job.department === "operations" && (
-        <table>
-          <thead>
-            <tr>
-              <th>Sr</th>
-              <th>Name</th>
-              <th>Program Selected</th>
-              <th>Created At</th>
-              <th>Delayed by</th>
-              <th>Status</th>
-              <th>Source</th>
-              <th>Actions</th>
+                {auth.user.job.department === "marketing" && (
+                  <>
+                    <button onClick={() => setFOpen(index)}>
+                      Assign Lead
+                    </button>
+                    {isFOpen === index && (
+                      <form onSubmit={(e) => assignSubmitHandler(e, l._id)}>
+                        <Select
+                          placeholder="Assign Leads"
+                          options={forwardLeadOptions}
+                          value={forward}
+                          onChange={setForward}
+                        />
+                        <button type="submit">Apply</button>
+                      </form>
+                    )}
+                  </>
+                )}
+
+                {auth.user.job.department === "operations" && (
+                  <Link to={`${l._id}/activities`}>Activities</Link>
+                )}
+
+                <Link to={`/editlead/${l._id}`}>Edit</Link>
+              </td>
             </tr>
-          </thead>
-
-          <tbody>
-            {auth.user.forwardedLeads && auth.user.forwardedLeads.length > 0
-              ? auth.user.forwardedLeads.map((l, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{l.client && l.client.name}</td>
-                    <td>{l.client && l.client.program}</td>
-                    <td>{l.client && l.createdAt.split("T")[0]}</td>
-                    <td>Nill</td>
-                    <td>{l.status}</td>
-                    <td>{l.source}</td>
-                    <td className="act-row">
-                      <Link to={`${l._id}/activities`}>Activities</Link>
-                    </td>
-                  </tr>
-                ))
-              : ""}
-          </tbody>
-        </table>
-      )}
+          ))}
+        </tbody>
+      </table>
     </section>
   );
 };

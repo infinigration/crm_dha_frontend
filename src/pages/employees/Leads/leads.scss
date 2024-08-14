@@ -2,9 +2,47 @@
 
 #e_leads {
   .act-row {
-
-    a{
-        text-align: center;
+    a {
+      text-align: center;
     }
+  }
+}
+.extra-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .select {
+    width: 300px;
+  }
+  .bulk-assign-lead {
+    display: flex;
+    margin: 20px 0;
+    gap: 10px;
+
+    button {
+      background-color: $accent-color;
+      border: none;
+      outline: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+}
+
+.act-row {
+  display: flex;
+}
+
+#edit-lead {
+  form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }

@@ -14,13 +14,25 @@
     gap: 20px;
     align-items: center;
 
-    button{
-        margin-top: 8px;
+    button {
+      margin-top: 8px;
     }
     input {
       width: 300px;
       background-color: white;
       padding: 8px;
     }
+  }
+}
+
+#add-new-vendor {
+  form {
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    display: flex;
+    flex-direction:column;
+    gap: 10px;
+    border-radius: 8px;
   }
 }

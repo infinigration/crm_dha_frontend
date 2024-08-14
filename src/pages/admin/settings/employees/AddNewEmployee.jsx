@@ -23,6 +23,7 @@ const AddNewEmployee = () => {
   const [password, setPassword] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [salary, setSalary] = useState("");
+  const [joiningDate, setJoiningDate] = useState("");
 
   const roleOptions = [
     { value: "employee", label: "Employee" },
@@ -81,6 +82,7 @@ const AddNewEmployee = () => {
         jobTitle,
         department.value,
         salary,
+        joiningDate,
         role.value,
         password
       )
@@ -236,6 +238,14 @@ const AddNewEmployee = () => {
             placeholder="Salary"
             value={salary}
             onChange={(e) => setSalary(e.target.value)}
+          />
+
+          <label>Joining Date</label>
+          <input
+            type="date"
+            placeholder="Joining Date"
+            value={joiningDate}
+            onChange={(e) => setJoiningDate(e.target.value)}
           />
 
           <button className="primary-btn" type="submit">
