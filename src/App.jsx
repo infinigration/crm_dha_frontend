@@ -494,14 +494,29 @@ const App = () => {
             element={
               <ProtectedRoute
                 isAuthenticated={isAuthenticated}
-                adminRoute={true}
-                isAdmin={user && user.role === "admin"}
                 redirect="/"
-                redirectAdmin="/"
               >
                 <Sidebar
                   navLists={
                     isAuthenticated && user.role === "admin" ? routes : ""
+                  }
+                  component={AdminClients}
+                  pageTitle="Clients"
+                />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/clients"
+            element={
+              <ProtectedRoute
+                isAuthenticated={isAuthenticated}
+                redirect="/"
+              >
+                <Sidebar
+                  navLists={
+                    operationRoutes
                   }
                   component={AdminClients}
                   pageTitle="Clients"
@@ -817,10 +832,8 @@ const App = () => {
             element={
               <ProtectedRoute
                 isAuthenticated={isAuthenticated}
-                adminRoute={true}
-                isAdmin={user && user.role === "admin"}
+
                 redirect="/"
-                redirectAdmin="/"
               >
                 <Sidebar
                   navLists={routes}
@@ -836,10 +849,9 @@ const App = () => {
             element={
               <ProtectedRoute
                 isAuthenticated={isAuthenticated}
-                adminRoute={true}
-                isAdmin={user && user.role === "admin"}
+
                 redirect="/"
-                redirectAdmin="/"
+
               >
                 <Sidebar
                   navLists={routes}

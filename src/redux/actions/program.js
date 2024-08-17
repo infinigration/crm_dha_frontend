@@ -4,6 +4,7 @@ import axios from "axios";
 export const createProgram =
   (
     country,
+    title,
     duration,
     totalCost,
     advance,
@@ -29,6 +30,7 @@ export const createProgram =
         `${server}/create-program`,
         {
           country,
+          title,
           duration,
           totalCost,
           advance,
@@ -44,7 +46,7 @@ export const createProgram =
           benefits,
           vendor,
           vendorFees,
-          currency
+          currency,
         },
         {
           headers: { "Content-Type": "application/json" },

@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom"
 import { getAllVendors } from "../../../redux/actions/vendor";
 const AddNewProgram = () => {
   const [country, setCountry] = useState();
+  const [title, setTitle] = useState();
   const [duration, setDuration] = useState();
   const [totalCost, setTotalCost] = useState();
   const [advance, setAdvance] = useState();
@@ -151,6 +152,7 @@ const AddNewProgram = () => {
     dispatch(
       createProgram(
         value.label,
+        title,
         duration,
         totalCost,
         advance,
@@ -204,6 +206,11 @@ const AddNewProgram = () => {
               onChange={changeHandler}
               placeholder="Choose Country"
             />
+          </div>
+
+          <div className="l-i">
+            <label htmlFor="">Title</label>
+            <input type="text" placeholder="e.g Canada TRC" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
 
           <div className="l-i">

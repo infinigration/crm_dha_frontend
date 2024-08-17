@@ -59,19 +59,21 @@ const AdminRemarks = ({ lead }) => {
         <button className="primary-btn">Submit</button>
       </form>
 
-      {remarks && remarks.length > 0 ? (
-        remarks.map((r) => (
-          <Remark
-            name={r.author.bioData.name}
-            time={r.createdAt.split("T")[0]}
-            image={r.author.avatar.url}
-            remark={r.remark}
-            title={r.title}
-          />
-        ))
-      ) : (
-        <p className="no_remarks">No Remarks Yet</p>
-      )}
+      <div className="review-container">
+        {remarks && remarks.length > 0 ? (
+          remarks.map((r) => (
+            <Remark
+              name={r.author.bioData.name}
+              time={r.createdAt}
+              image={r.author.avatar.url}
+              remark={r.remark}
+              title={r.title}
+            />
+          ))
+        ) : (
+          <p className="no_remarks">No Remarks Yet</p>
+        )}
+      </div>
     </section>
   );
 };

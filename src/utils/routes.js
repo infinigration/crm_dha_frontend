@@ -114,4 +114,9 @@ export const operationRoutes = [
     value: "/contracts",
     label: "Contracts",
   },
+
+  {
+    value: "/clients",
+    label: "Clients",
+  },
 ];

@@ -70,7 +70,7 @@ const Remarks = () => {
           ? filteredLead.remarks.map((r, index) => (
               <Remark
                 name={r.author.bioData.name}
-                time={r.createdAt.split("T")[0]}
+                time={r.createdAt}
                 image={r.author.avatar.url}
                 remark={r.remark}
                 title={r.title}

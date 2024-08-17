@@ -39,10 +39,7 @@ const Leads = () => {
     },
   ];
 
-  useEffect(() => {
-    dispatch(getEmployees());
-    dispatch(getAllLeads());
-  }, [dispatch]);
+
 
   useEffect(() => {
     if (error) {
@@ -54,6 +51,11 @@ const Leads = () => {
       dispatch({ type: "clearMessage" });
     }
   }, [error, message, dispatch]);
+
+  useEffect(() => {
+    dispatch(getEmployees());
+    dispatch(getAllLeads());
+  }, [dispatch, error, message]);
 
   const forwardLeadOptions = employees
     ? employees
@@ -196,6 +198,8 @@ const Leads = () => {
                   />
                 </td>
               )}
+
+
               <td>{index + 1}</td>
               <td>{l.client.name}</td>
               <td>
@@ -249,7 +253,16 @@ const Leads = () => {
                 )}
 
                 {auth.user.job.department === "operations" && (
+                  <>
                   <Link to={`${l._id}/activities`}>Activities</Link>
+                  <Link to={`/admin/contracts/add/${l._id}`}>Convert to Contract</Link>
+                  </>
+                )}
+
+                {auth.user.job.department === "sales" && (
+                  <>
+                    <Link to={`${l._id}/activities`}>Activities</Link>
+                  </>
                 )}
 
                 <Link to={`/editlead/${l._id}`}>Edit</Link>
