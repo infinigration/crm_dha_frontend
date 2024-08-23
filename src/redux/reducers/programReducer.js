@@ -42,6 +42,33 @@ export const programReducer = createReducer(
       state.error = action.payload;
     },
 
+    changeProgramStatusRequest: (state) => {
+      state.loading = true;
+    },
+
+    changeProgramStatusSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+    },
+    changeProgramStatusFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    
+    deleteProgramRequest: (state) => {
+      state.loading = true;
+    },
+
+    deleteProgramSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+    },
+    deleteProgramFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
     clearMessage: (state) => {
       state.message = null;
     },

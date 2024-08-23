@@ -139,3 +139,48 @@ export const updateProgram =
       });
     }
   };
+
+export const changeProgramStatus = (id) => async (dispatch) => {
+  dispatch({ type: "changeProgramStatusRequest" });
+
+  try {
+    const { data } = await axios.put(
+      `${server}/program/${id}`,
+      {},
+
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+
+    dispatch({ type: "changeProgramStatusSuccess", payload: data });
+  } catch (error) {
+    dispatch({
+      type: "changeProgramStatusFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const deleteProgram = (id) => async (dispatch) => {
+  dispatch({ type: "deleteProgramRequest" });
+
+  try {
+    const { data } = await axios.delete(
+      `${server}/program/${id}`,
+
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+
+    dispatch({ type: "deleteProgramSuccess", payload: data });
+  } catch (error) {
+    dispatch({
+      type: "deleteProgramFail",
+      payload: error.response.data.message,
+    });
+  }
+};

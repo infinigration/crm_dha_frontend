@@ -1,6 +1,10 @@
 import React, { lazy, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getAllPrograms } from "../../../redux/actions/program";
+import {
+  changeProgramStatus,
+  deleteProgram,
+  getAllPrograms,
+} from "../../../redux/actions/program";
 import Loader from "../../loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
 const Programs = () => {
@@ -11,6 +15,16 @@ const Programs = () => {
   useEffect(() => {
     dispatch(getAllPrograms());
   }, [error, message]);
+
+  const changeStatusHandler = (e) => {
+    e.preventDefault();
+    dispatch(changeProgramStatus(e.target.id));
+  };
+
+  const deleteProgramHandler = (e) => {
+    e.preventDefault();
+    dispatch(deleteProgram(e.target.id));
+  };
 
   const navigate = useNavigate();
   return loading ? (
@@ -47,7 +61,12 @@ const Programs = () => {
                     <button onClick={() => navigate(`/admin/program/${p._id}`)}>
                       View
                     </button>
-                    <button>Disable</button>
+                    <button onClick={changeStatusHandler} id={p._id}>
+                      Disable
+                    </button>
+                    <button onClick={deleteProgramHandler} id={p._id}>
+                      Delete
+                    </button>
                     <Link to={`/admin/program/${p._id}/update`}>Update</Link>
                   </td>
                 </tr>
