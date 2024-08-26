@@ -6,6 +6,7 @@ import {
   deleteLead,
   forwardLead,
   getAllLeads,
+  getMyLeads,
 } from "../../../redux/actions/leads";
 import Select from "react-select";
 import { getEmployees } from "../../../redux/actions/admin";
@@ -23,23 +24,12 @@ const Leads = () => {
 
   const { employees } = useSelector((state) => state.admin);
   const { auth } = useSelector((state) => state.user);
+
   const { loading, error, message, leads } = useSelector(
     (state) => state.leads
   );
+
   const dispatch = useDispatch();
-
-  const statusOptions = [
-    {
-      value: "requirements",
-      label: "Requirements Gathering",
-    },
-    {
-      value: "documents",
-      label: "Documents Verification",
-    },
-  ];
-
-
 
   useEffect(() => {
     if (error) {
@@ -54,7 +44,7 @@ const Leads = () => {
 
   useEffect(() => {
     dispatch(getEmployees());
-    dispatch(getAllLeads());
+    (auth.user.job.department === "marketing" ? dispatch(getAllLeads()) : dispatch(getMyLeads()))
   }, [dispatch, error, message]);
 
   const forwardLeadOptions = employees
@@ -88,7 +78,7 @@ const Leads = () => {
   const assignSubmitHandler = (e, id) => {
     e.preventDefault();
     dispatch(assignLead(id, forward.value));
-    setFOpen(null); // Close the "Assign Lead" form after submission
+    setFOpen(null);
   };
 
   const forwardLeadHandler = (e, id) => {
@@ -103,8 +93,8 @@ const Leads = () => {
       selectedLeads.forEach((leadId) => {
         dispatch(assignLead(leadId, bulkAssign.value));
       });
-      setSelectedLeads([]); // Clear selected leads after assigning
-      setBulkAssign(""); // Clear bulk assign selection
+      setSelectedLeads([]);
+      setBulkAssign("");
     } else {
       toast.error("No leads selected");
     }
@@ -116,7 +106,7 @@ const Leads = () => {
     } else if (filterOption === "unassigned") {
       return l.assignedTo === "";
     }
-    return true; // "all" leads
+    return true;
   });
 
 
@@ -189,6 +179,7 @@ const Leads = () => {
         <tbody>
           {filteredLeads && filteredLeads.length > 0 && filteredLeads.map((l, index) => (
             <tr key={index}>
+              
               {auth && auth.user.job.department === "marketing" && (
                 <td>
                   <input
@@ -254,8 +245,8 @@ const Leads = () => {
 
                 {auth.user.job.department === "operations" && (
                   <>
-                  <Link to={`${l._id}/activities`}>Activities</Link>
-                  <Link to={`/admin/contracts/add/${l._id}`}>Convert to Contract</Link>
+                    <Link to={`${l._id}/activities`}>Activities</Link>
+                    <Link to={`/admin/contracts/add/${l._id}`}>Convert to Contract</Link>
                   </>
                 )}
 

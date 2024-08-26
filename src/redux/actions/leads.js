@@ -39,6 +39,25 @@ export const getAllLeads = () => async (dispatch) => {
   }
 };
 
+export const getMyLeads = () => async (dispatch) => {
+  dispatch({ type: "getMyLeadsRequest" });
+
+  try {
+    const { data } = await axios.get(
+      `${server}/my_leads`,
+
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+
+    dispatch({ type: "getMyLeadsSuccess", payload: data });
+  } catch (error) {
+    dispatch({ type: "getMyLeadsFail", payload: error.response.data.message });
+  }
+};
+
 export const getLeadDetails = (id) => async (dispatch) => {
   dispatch({ type: "getLeadDetailsRequest" });
 

@@ -4,14 +4,14 @@ import "./sidebar.scss";
 import logo from "../../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/actions/auth";
-
+import { IoMdLogOut } from "react-icons/io";
 const Sidebar = ({ navLists, component: Component, pageTitle = "" }) => {
   const dpath = useLocation().pathname;
   const [visible, setVisible] = useState(false);
   const [subLinksVisible, setSubLinksVisible] = useState({});
 
   const isActive = (path) => {
-    if (dpath === path || dpath.split("/")[2] === path.split("/")[2]) {
+    if (dpath === path) {
       return true;
     }
     return false;
@@ -42,29 +42,29 @@ const Sidebar = ({ navLists, component: Component, pageTitle = "" }) => {
 
             {navLists && navLists.length > 0
               ? navLists.map((l, index) => (
-                  <div className="link-container" key={index}>
-                    <Link
-                      to={l.value}
-                      className={isActive(l.value) ? "active" : ""}
-                      onClick={l.subLinks ? () => toggleSubLinks(index) : null}
+                <div className="link-container" key={index}>
+                  <Link
+                    to={l.value}
+                    className={isActive(l.value) ? "active" : ""}
+                    onClick={l.subLinks ? () => toggleSubLinks(index) : null}
+                  >
+                    {l.label}
+                  </Link>
+                  {l.subLinks && (
+                    <ul
+                      className={
+                        subLinksVisible[index] ? "visible" : "hidden"
+                      }
                     >
-                      {l.label}
-                    </Link>
-                    {l.subLinks && (
-                      <ul
-                        className={
-                          subLinksVisible[index] ? "visible" : "hidden"
-                        }
-                      >
-                        {l.subLinks.map((sl, subIndex) => (
-                          <li key={subIndex}>
-                            <Link to={sl.value}>{sl.label}</Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))
+                      {l.subLinks.map((sl, subIndex) => (
+                        <li key={subIndex}>
+                          <Link to={sl.value}>{sl.label}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))
               : ""}
           </div>
           <div className="component-area">
@@ -78,19 +78,9 @@ const Sidebar = ({ navLists, component: Component, pageTitle = "" }) => {
                 ) : (
                   <p className="heading">{pageTitle}</p>
                 )}
-                <div className="icons">
-                  <img
-                    src="https://img.freepik.com/free-photo/handsome-bearded-guy-posing-against-white-wall_273609-20597.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1712188800&semt=sph"
-                    alt=""
-                    onClick={() => setVisible(!visible)}
-                  />
-                  <div className={visible ? "dropdown" : "hide"}>
-                    <ul>
-                      <Link to="/update-profile">Update Profile</Link>
-                      <button onClick={clickHandler}>Logout</button>
-                    </ul>
-                  </div>
-                </div>
+
+                <IoMdLogOut onClick={clickHandler} />
+
               </div>
               <Component />
             </div>

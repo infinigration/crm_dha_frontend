@@ -62,6 +62,8 @@ import EmployeePayroll from "./pages/admin/finances/EmployeePayroll";
 import Incomings from "./pages/admin/finances/Incomings";
 import AddNewVendor from "./pages/admin/settings/vendors/AddNewVendor";
 import EditLead from "./pages/employees/Leads/EditLead";
+import Dashboard from "./pages/employees/dashboard/Dashboard";
+import MarketingLeads from "./pages/employees/marketing/MarketingLeads";
 
 const App = () => {
   const locomotiveScroll = new LocomotiveScroll();
@@ -85,6 +87,9 @@ const App = () => {
     }
   }, [error, message]);
 
+
+
+
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
@@ -102,7 +107,12 @@ const App = () => {
                 redirect={
                   user && user.role === "admin"
                     ? "/admin/dashboard"
-                    : "/profile"
+                    : user && user.job.department === "marketing"
+                      ? "/marketing" :
+                      user && user.job.department === "sales"
+                        ? "/sales" :
+                        user && user.job.department === "operations"
+                          ? "/operations" : ""
                 }
               >
                 <Login />
@@ -125,6 +135,32 @@ const App = () => {
               </ProtectedRoute>
             }
           ></Route>
+
+          <Route
+            path="/marketing"
+            element={
+              <ProtectedRoute
+                isAuthenticated={isAuthenticated}
+                redirect={"/"}
+              >
+                <Sidebar component={Dashboard} navLists={marketingRoutes} />
+              </ProtectedRoute>
+            }
+          ></Route>
+
+          <Route
+            path="/marketing/leads"
+            element={
+              <ProtectedRoute
+                isAuthenticated={isAuthenticated}
+                redirect={"/"}
+              >
+                <Sidebar component={MarketingLeads} navLists={marketingRoutes} />
+              </ProtectedRoute>
+            }
+          ></Route>
+
+
 
           <Route
             path="/admin/dashboard"

@@ -28,22 +28,7 @@ const Profile = () => {
   console.log(auth.user.bioData);
   return (
     <section id="profile" className="section">
-      <div className="stats-row">
-        <div className="profile-container">
-          <img
-            src={
-              auth.user.avatar.url !== "temp_url"
-                ? auth.user.avatar.url
-                : placeholder
-            }
-            alt=""
-          />
-          <p className="date-joined">
-            <span>Date Joined: </span>
-            {auth.user.job.joningDate || "Nill"}
-          </p>
-        </div>
-      </div>
+    
       <form action="">
         <h2 className="heading">Bio Data</h2>
         <label>Name:</label>

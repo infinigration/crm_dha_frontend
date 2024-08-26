@@ -89,13 +89,22 @@ export const salesRoutes = [
 
 export const marketingRoutes = [
   {
-    value: "/profile",
-    label: "Profile",
+    value: "/marketing",
+    label: "Dashboard",
+  },
+   {
+    value: "/marketing/leads",
+    label: "Leads",
   },
 
   {
-    value: "/leads",
-    label: "Leads",
+    value: "/marketing/returned-leads",
+    label: "Returned Leads",
+  },
+
+  {
+    value: "/profile",
+    label: "Profile",
   },
 ];
 
