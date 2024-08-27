@@ -208,7 +208,7 @@ const MarketingLeads = () => {
 
                                 <td className='actions'>
                                     <Link to={`/editlead/${l._id}`}>Edit Lead</Link>
-                                    <Link to={`/editlead/${l._id}`}>View Remarks</Link>
+                                    {/* <Link to={`/editlead/${l._id}`}>View Remarks</Link> */}
                                     <button id={l._id} onClick={deleteLeadHandler}>Delete</button>
                                 </td>
                             </tr>
