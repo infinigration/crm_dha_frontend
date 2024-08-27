@@ -64,15 +64,15 @@ export const leadsReducer = createReducer(
       state.error = action.payload;
     },
 
-    deleteLeadStatusRequest: (state) => {
+    deleteLeadRequest: (state) => {
       state.loading = true;
     },
-    deleteLeadStatusSuccess: (state, action) => {
+    deleteLeadSuccess: (state, action) => {
       state.loading = false;
       state.leads = action.payload;
       state.message = action.payload.message;
     },
-    deleteLeadStatusFail: (state, action) => {
+    deleteLeadFail: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
@@ -172,6 +172,30 @@ export const leadsReducer = createReducer(
       state.message = action.payload.message;
     },
     updateClientDocumentFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    returnLeadRequest: (state) => {
+      state.loading = true;
+    },
+    returnLeadSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    },
+    returnLeadFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    updateSalesLeadStatusRequest: (state) => {
+      state.loading = true;
+    },
+    updateSalesLeadStatusSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    },
+    updateSalesLeadStatusFail: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

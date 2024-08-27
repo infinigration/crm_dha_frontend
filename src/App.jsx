@@ -64,6 +64,11 @@ import AddNewVendor from "./pages/admin/settings/vendors/AddNewVendor";
 import EditLead from "./pages/employees/Leads/EditLead";
 import Dashboard from "./pages/employees/dashboard/Dashboard";
 import MarketingLeads from "./pages/employees/marketing/MarketingLeads";
+import ReturnedLeads from "./pages/employees/marketing/ReturnedLeads";
+import SalesLeads from "./pages/employees/sales/SalesLeads";
+import ReturnLead from "./pages/employees/sales/ReturnLead";
+import OpearationLeads from "./pages/employees/operations/OperationLeads";
+import UpdateLeadStatus from "./pages/employees/sales/UpdateLeadStatus";
 
 const App = () => {
   const locomotiveScroll = new LocomotiveScroll();
@@ -87,9 +92,6 @@ const App = () => {
     }
   }, [error, message]);
 
-
-
-
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
@@ -108,11 +110,12 @@ const App = () => {
                   user && user.role === "admin"
                     ? "/admin/dashboard"
                     : user && user.job.department === "marketing"
-                      ? "/marketing" :
-                      user && user.job.department === "sales"
-                        ? "/sales" :
-                        user && user.job.department === "operations"
-                          ? "/operations" : ""
+                    ? "/marketing"
+                    : user && user.job.department === "sales"
+                    ? "/sales"
+                    : user && user.job.department === "operations"
+                    ? "/operations"
+                    : ""
                 }
               >
                 <Login />
@@ -139,10 +142,7 @@ const App = () => {
           <Route
             path="/marketing"
             element={
-              <ProtectedRoute
-                isAuthenticated={isAuthenticated}
-                redirect={"/"}
-              >
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect={"/"}>
                 <Sidebar component={Dashboard} navLists={marketingRoutes} />
               </ProtectedRoute>
             }
@@ -151,16 +151,49 @@ const App = () => {
           <Route
             path="/marketing/leads"
             element={
-              <ProtectedRoute
-                isAuthenticated={isAuthenticated}
-                redirect={"/"}
-              >
-                <Sidebar component={MarketingLeads} navLists={marketingRoutes} />
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect={"/"}>
+                <Sidebar
+                  component={MarketingLeads}
+                  navLists={marketingRoutes}
+                  pageTitle="Leads"
+                />
               </ProtectedRoute>
             }
           ></Route>
 
+          <Route
+            path="/marketing/returned-leads"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect={"/"}>
+                <Sidebar
+                  component={ReturnedLeads}
+                  navLists={marketingRoutes}
+                  pageTitle="Returned Leads"
+                />
+              </ProtectedRoute>
+            }
+          ></Route>
 
+          <Route
+            path="/operations"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect={"/"}>
+                <Sidebar component={Dashboard} navLists={operationRoutes} />
+              </ProtectedRoute>
+            }
+          ></Route>
+
+          <Route
+            path="/operations/leads"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect={"/"}>
+                <Sidebar
+                  component={OpearationLeads}
+                  navLists={operationRoutes}
+                />
+              </ProtectedRoute>
+            }
+          ></Route>
 
           <Route
             path="/admin/dashboard"
@@ -175,6 +208,67 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/sales"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect={"/"}>
+                <Sidebar component={Dashboard} navLists={salesRoutes} />
+              </ProtectedRoute>
+            }
+          ></Route>
+
+          <Route
+            path="/sales/leads"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect={"/"}>
+                <Sidebar
+                  component={SalesLeads}
+                  navLists={salesRoutes}
+                  pageTitle="Leads"
+                />
+              </ProtectedRoute>
+            }
+          ></Route>
+
+          <Route
+            path="/sales/leads/:id/activities"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect={"/"}>
+                <Sidebar
+                  component={LeadActivities}
+                  navLists={salesRoutes}
+                  pageTitle="Lead Details"
+                />
+              </ProtectedRoute>
+            }
+          ></Route>
+
+          <Route
+            path="/sales/leads/:id/updatestatus"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect={"/"}>
+                <Sidebar
+                  component={UpdateLeadStatus}
+                  navLists={salesRoutes}
+                  pageTitle="Update Lead Status"
+                />
+              </ProtectedRoute>
+            }
+          ></Route>
+
+          <Route
+            path="/sales/leads/:id/return"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect={"/"}>
+                <Sidebar
+                  component={ReturnLead}
+                  navLists={salesRoutes}
+                  pageTitle="Return Lead"
+                />
+              </ProtectedRoute>
+            }
+          ></Route>
 
           <Route
             path="/admin/settings"
@@ -528,10 +622,7 @@ const App = () => {
           <Route
             path="/admin/clients"
             element={
-              <ProtectedRoute
-                isAuthenticated={isAuthenticated}
-                redirect="/"
-              >
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect="/">
                 <Sidebar
                   navLists={
                     isAuthenticated && user.role === "admin" ? routes : ""
@@ -546,14 +637,9 @@ const App = () => {
           <Route
             path="/clients"
             element={
-              <ProtectedRoute
-                isAuthenticated={isAuthenticated}
-                redirect="/"
-              >
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect="/">
                 <Sidebar
-                  navLists={
-                    operationRoutes
-                  }
+                  navLists={operationRoutes}
                   component={AdminClients}
                   pageTitle="Clients"
                 />
@@ -866,11 +952,7 @@ const App = () => {
           <Route
             path="/admin/contracts/add"
             element={
-              <ProtectedRoute
-                isAuthenticated={isAuthenticated}
-
-                redirect="/"
-              >
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect="/">
                 <Sidebar
                   navLists={routes}
                   component={CreateContract}
@@ -883,12 +965,7 @@ const App = () => {
           <Route
             path="/admin/contracts/add/:id"
             element={
-              <ProtectedRoute
-                isAuthenticated={isAuthenticated}
-
-                redirect="/"
-
-              >
+              <ProtectedRoute isAuthenticated={isAuthenticated} redirect="/">
                 <Sidebar
                   navLists={routes}
                   component={CreateContract}
@@ -1023,10 +1100,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                        ? salesRoutes
-                        : isAuthenticated && user.job.department === "operations"
-                          ? operationRoutes
-                          : routes
+                      ? salesRoutes
+                      : isAuthenticated && user.job.department === "operations"
+                      ? operationRoutes
+                      : routes
                   }
                   component={Profile}
                 />
@@ -1046,10 +1123,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                        ? salesRoutes
-                        : isAuthenticated && user.job.department === "operations"
-                          ? operationRoutes
-                          : routes
+                      ? salesRoutes
+                      : isAuthenticated && user.job.department === "operations"
+                      ? operationRoutes
+                      : routes
                   }
                   component={Leads}
                   pageTitle="Leads"
@@ -1070,10 +1147,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                        ? salesRoutes
-                        : isAuthenticated && user.job.department === "operations"
-                          ? operationRoutes
-                          : routes
+                      ? salesRoutes
+                      : isAuthenticated && user.job.department === "operations"
+                      ? operationRoutes
+                      : routes
                   }
                   component={EditLead}
                   pageTitle="Edit Lead"
@@ -1094,10 +1171,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                        ? salesRoutes
-                        : isAuthenticated && user.job.department === "operations"
-                          ? operationRoutes
-                          : routes
+                      ? salesRoutes
+                      : isAuthenticated && user.job.department === "operations"
+                      ? operationRoutes
+                      : routes
                   }
                   component={Contracts}
                   pageTitle="Contracts"
@@ -1118,10 +1195,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                        ? salesRoutes
-                        : isAuthenticated && user.job.department === "operations"
-                          ? operationRoutes
-                          : routes
+                      ? salesRoutes
+                      : isAuthenticated && user.job.department === "operations"
+                      ? operationRoutes
+                      : routes
                   }
                   component={AddLeads}
                   pageTitle="Create Lead"
@@ -1142,10 +1219,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                        ? salesRoutes
-                        : isAuthenticated && user.job.department === "operations"
-                          ? operationRoutes
-                          : routes
+                      ? salesRoutes
+                      : isAuthenticated && user.job.department === "operations"
+                      ? operationRoutes
+                      : routes
                   }
                   component={LeadActivities}
                   pageTitle="Create Lead"
@@ -1166,10 +1243,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                        ? salesRoutes
-                        : isAuthenticated && user.job.department === "operations"
-                          ? operationRoutes
-                          : routes
+                      ? salesRoutes
+                      : isAuthenticated && user.job.department === "operations"
+                      ? operationRoutes
+                      : routes
                   }
                   component={Remarks}
                   pageTitle="Remarks"
@@ -1190,10 +1267,10 @@ const App = () => {
                     isAuthenticated && user.job.department === "marketing"
                       ? marketingRoutes
                       : isAuthenticated && user.job.department === "sales"
-                        ? salesRoutes
-                        : isAuthenticated && user.job.department === "operations"
-                          ? operationRoutes
-                          : routes
+                      ? salesRoutes
+                      : isAuthenticated && user.job.department === "operations"
+                      ? operationRoutes
+                      : routes
                   }
                   component={LeadActivities}
                   pageTitle="Remarks"

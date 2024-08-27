@@ -6,16 +6,18 @@ import Select from 'react-select';
 import toast from 'react-hot-toast';
 import "./leads.scss";
 import { getEmployees } from '../../../redux/actions/admin';
+import Loader from '../../loader/Loader';
 
 const MarketingLeads = () => {
-    const { leads, message, error } = useSelector(state => state.leads);
+    const { leads, message, error, loading } = useSelector(state => state.leads);
     const { employees } = useSelector(state => state.admin);
     const dispatch = useDispatch();
 
     const [selectedLeads, setSelectedLeads] = useState([]); // State to track selected leads
     const [bulkAssign, setBulkAssign] = useState(null); // State for selected employee for bulk assign
     const [filterTag, setFilterTag] = useState("all"); // State for filtering leads by tag
-    const [filterEmployee, setFilterEmployee] = useState(null); // State for filtering leads by employee
+    const [filterEmployee, setFilterEmployee] = useState(null);
+    // State for filtering leads by employee
     const [filterDate, setFilterDate] = useState(""); // State for filtering leads by date
     const [selectCount, setSelectCount] = useState(""); // State for the number of unassigned leads to select
 
@@ -86,7 +88,11 @@ const MarketingLeads = () => {
         }))
         : [];
 
-    const filteredLeads = leads.leads ? leads.leads.filter(lead => {
+    let freshLeads = leads && leads.leads.length > 0 ? leads.leads.filter((l) => l.type === "fresh") : []
+
+ 
+
+    const filteredLeads = freshLeads && freshLeads ? freshLeads.filter(lead => {
         let tagCondition = filterTag === "all" ||
             (filterTag === "assigned" && lead.assignedTo) ||
             (filterTag === "unassigned" && !lead.assignedTo);
@@ -107,7 +113,7 @@ const MarketingLeads = () => {
     };
 
     return (
-        <section className='marketing-leads'>
+        loading ? <Loader /> : <section className='marketing-leads'>
             <div className="actions-row">
                 <form className="bulk-assign-lead" onSubmit={bulkAssignHandler}>
                     <Select
@@ -185,7 +191,7 @@ const MarketingLeads = () => {
                     </thead>
 
                     <tbody>
-                        {filteredLeads && filteredLeads.length > 0 ? filteredLeads.map((l) => (
+                        {filteredLeads && filteredLeads.length > 0 ? filteredLeads.filter((l) => l.type === "fresh").map((l) => (
                             <tr key={l._id}>
                                 <td>
                                     <input

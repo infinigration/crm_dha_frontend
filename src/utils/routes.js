@@ -77,13 +77,17 @@ export const routes = [
 
 export const salesRoutes = [
   {
-    value: "/profile",
-    label: "Profile",
+    value: "/sales",
+    label: "Dashboard",
   },
 
   {
-    value: "/leads",
+    value: "/sales/leads",
     label: "Leads",
+  },
+  {
+    value: "/profile",
+    label: "Profile",
   },
 ];
 
@@ -92,7 +96,7 @@ export const marketingRoutes = [
     value: "/marketing",
     label: "Dashboard",
   },
-   {
+  {
     value: "/marketing/leads",
     label: "Leads",
   },
@@ -109,23 +113,27 @@ export const marketingRoutes = [
 ];
 
 export const operationRoutes = [
-  {
-    value: "/profile",
-    label: "Profile",
-  },
 
   {
-    value: "/leads",
+    value: "/operations",
+    label: "Dashboard"
+  },
+  {
+    value: "/operations/leads",
     label: "Leads",
   },
 
   {
-    value: "/contracts",
+    value: "/operations/contracts",
     label: "Contracts",
   },
 
   {
-    value: "/clients",
+    value: "/operations/clients",
     label: "Clients",
+  },
+  {
+    value: "/profile",
+    label: "Profile",
   },
 ];

@@ -316,3 +316,49 @@ export const forwardLead = (leadId, userId) => async (dispatch) => {
     });
   }
 };
+
+export const returnLead = (id, title, remark) => async (dispatch) => {
+  dispatch({ type: "returnLeadRequest" });
+
+  try {
+    const { data } = await axios.post(
+      `${server}/returnlead`,
+      { id, title, remark },
+
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+
+    dispatch({ type: "returnLeadSuccess", payload: data });
+  } catch (error) {
+    dispatch({
+      type: "returnLeadFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const updateSalesLeadStatus = (id, status) => async (dispatch) => {
+  dispatch({ type: "updateSalesLeadStatusRequest" });
+
+  try {
+    const { data } = await axios.put(
+      `${server}/changeasalesleadstatus`,
+      { id, status },
+
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+
+    dispatch({ type: "updateSalesLeadStatusSuccess", payload: data });
+  } catch (error) {
+    dispatch({
+      type: "updateSalesLeadStatusFail",
+      payload: error.response.data.message,
+    });
+  }
+};

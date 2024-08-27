@@ -23,13 +23,15 @@
     }
   }
 }
-.actions-row {
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
+.marketing-leads {
+  .actions-row {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
 
-  a {
-    margin: 5px 0;
+    a {
+      margin: 5px 0;
+    }
   }
 }
 .bulk-assign-lead {
