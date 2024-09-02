@@ -7,28 +7,30 @@ import Loader from "../../pages/loader/Loader";
 import toast from "react-hot-toast";
 
 const Documents = ({ documents }) => {
-  const [avatar, setAvatar] = useState("");
-  const fileInputRef = useRef(null);
+  const [avatar, setAvatar] = useState(null);
+  const [currentDocId, setCurrentDocId] = useState(null);
+  const fileInputRefs = useRef({});
   const dispatch = useDispatch();
   const params = useParams();
 
-  const handleFileUpload = () => {
-    fileInputRef.current.click();
+  const handleFileUpload = (id) => {
+    fileInputRefs.current[id].click();
+    setCurrentDocId(id);
   };
 
-  const changeImageHandler = (e, id) => {
+  const changeImageHandler = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
 
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setAvatar(file);
-      console.log(file);
-    };
+    if (file && currentDocId) {
+      const myForm = new FormData();
+      myForm.append("file", file);
 
-    const myForm = new FormData();
-    myForm.append("file", file);
-    dispatch(uploadClientDocuments(myForm, params.id, id));
+      dispatch(uploadClientDocuments(myForm, params.id, currentDocId));
+
+      // Reset state
+      setCurrentDocId(null);
+      setAvatar(null);
+    }
   };
 
   const { loading, error, message } = useSelector((state) => state.leads);
@@ -41,7 +43,7 @@ const Documents = ({ documents }) => {
     if (message) {
       toast.success(message);
       dispatch({ type: "clearMessage" });
-      dispatch(getAllLeads());
+
     }
   }, [error, loading, message]);
 
@@ -63,34 +65,32 @@ const Documents = ({ documents }) => {
         <tbody>
           {documents && documents.length > 0
             ? documents.map((d, index) => (
-                <tr key={d._id}>
-                  {" "}
-                  {/* Add key prop */}
-                  <td>{index + 1}</td>
-                  <td>{d.title}</td>
-                  <td>{d.status}</td>
-                  <td className="actions">
-                    {d.status != "uploaded" ? (
-                      <div>
-                        <input
-                          type="file"
-                          ref={fileInputRef}
-                          style={{ display: "none" }}
-                          onChange={(e) => changeImageHandler(e, d._id)} // Pass 'd._id' as second argument
-                        />
-                        <button onClick={handleFileUpload}>Upload</button>
-                      </div>
-                    ) : (
-                      <Link to={d.file.url} target="_blank">
-                        View
-                      </Link>
-                    )}
-                    {/* <button>Approve</button>
-                    <button>Decline</button> */}
-                  </td>
-                </tr>
-              ))
-            : ""}
+              <tr key={d._id} id={d._id}>
+                <td>{index + 1}</td>
+                <td>{d.title}</td>
+                <td>{d.status}</td>
+                <td className="actions">
+                  {d.status !== "uploaded" ? (
+                    <div>
+                      <input
+                        type="file"
+                        ref={(el) => (fileInputRefs.current[d._id] = el)}
+                        style={{ display: "none" }}
+                        onChange={changeImageHandler}
+                      />
+                      <button onClick={() => handleFileUpload(d._id)}>
+                        Upload
+                      </button>
+                    </div>
+                  ) : (
+                    <Link to={d.file.url} target="_blank">
+                      View
+                    </Link>
+                  )}
+                </td>
+              </tr>
+            ))
+            : <tr><td colSpan="4">No Documents Found</td></tr>}
         </tbody>
       </table>
     </section>

@@ -6,9 +6,9 @@ import { uploadClientProfile } from "../../redux/actions/leads";
 import Loader from "../../pages/loader/Loader";
 import { useParams } from "react-router-dom";
 const ClientProfile = ({ client, assignedTo, leadId }) => {
-  const [name, setName] = useState(client.name);
-  const [email, setEmail] = useState(client.email);
-  const [phone, setPhone] = useState(client.phone);
+  const [name, setName] = useState(client?.name || "No Name");
+  const [email, setEmail] = useState(client?.email || "No Email");
+  const [phone, setPhone] = useState(client?.phone || "No Phone");
 
   const [avatar, setAvatar] = useState("");
   const params = useParams();
@@ -37,10 +37,11 @@ const ClientProfile = ({ client, assignedTo, leadId }) => {
   ) : (
     <div id="client-profile">
       <form className="img-box" onSubmit={submitHandler}>
-        <img src={client.avatar.url} alt="" />
+        <img src={client?.avatar.url || ""} alt="" />
         <input type="file" onChange={changeImageHandler} />
         <button className="primary-btn">Update Picture</button>
       </form>
+      
       <form action="">
         <div>
           <label htmlFor="">Name</label>
@@ -76,7 +77,7 @@ const ClientProfile = ({ client, assignedTo, leadId }) => {
             type="text"
             placeholder="Assigned To"
             readOnly
-            value={assignedTo && assignedTo.bioData.name}
+            value={assignedTo?.bioData?.name || ""}
           />
         </div>
 

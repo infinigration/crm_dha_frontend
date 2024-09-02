@@ -18,44 +18,28 @@ const ProgramDetails = () => {
         </div>
 
         <div className="feild">
+          <h3>Title</h3>
+          <p>{filteredProgram.generalInformation[0].title}</p>
+        </div>
+
+        <div className="feild">
           <h3>Duration</h3>
-          <p>{filteredProgram.generalInformation[0].duration} Year</p>
+          <p>{filteredProgram.generalInformation[0].duration}</p>
         </div>
 
         <div className="feild">
           <h3>Total Cost</h3>
-          <p>{filteredProgram.generalInformation[0].totalCost}</p>
+          <p>{filteredProgram.generalInformation[0].totalCost} {filteredProgram.generalInformation[0].currency}</p>
         </div>
 
-        <div className="feild">
-          <h3>Advance (1st Installement)</h3>
-          <p>{filteredProgram.generalInformation[0].advance}</p>
-        </div>
 
-        <div className="feild">
-          <h3>Work Permit (2nd Installement)</h3>
-          <p>{filteredProgram.generalInformation[0].workPermit}</p>
-        </div>
 
-        <div className="feild">
-          <h3>Passport Request (3rd Installement)</h3>
-          <p>{filteredProgram.generalInformation[0].passportRequest}</p>
-        </div>
-
-        <div className="feild">
-          <h3>Visa Cost</h3>
-          <p>{filteredProgram.generalInformation[0].visaCost}</p>
-        </div>
 
         <div className="feild">
           <h3>Deduction</h3>
-          <p>{filteredProgram.generalInformation[0].deduction}</p>
+          <p>{filteredProgram.generalInformation[0].deduction} {filteredProgram.generalInformation[0].currency}</p>
         </div>
 
-        <div className="feild">
-          <h3>Province</h3>
-          <p>{filteredProgram.generalInformation[0].province}</p>
-        </div>
 
         <div className="feild">
           <h3>Process Duaration</h3>
@@ -99,6 +83,16 @@ const ProgramDetails = () => {
         <h2>Benefits</h2>
 
         {filteredProgram.benefits && filteredProgram.benefits.map((j) => (
+          <div className="feild">
+            <h3>{j.title}</h3>
+          </div>
+        ))}
+      </div>
+
+      <div className="general-information">
+        <h2>Process</h2>
+
+        {filteredProgram.processes && filteredProgram.processes.map((j) => (
           <div className="feild">
             <h3>{j.title}</h3>
           </div>

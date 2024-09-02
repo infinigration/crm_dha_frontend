@@ -40,6 +40,7 @@ const ReturnLead = () => {
     { value: "Phone Busy", label: "Phone Busy" },
     { value: "No Response", label: "No Response" },
     { value: "Done Based", label: "Done Based" },
+    { value: "Not Used", label: "Not Used" },
   ];
   return loading ? (
     <Loader />

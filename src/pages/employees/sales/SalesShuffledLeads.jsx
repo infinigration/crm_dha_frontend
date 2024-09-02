@@ -5,7 +5,6 @@ import {
   deleteLead,
   getAllLeads,
   getMyLeads,
-  returnLead,
 } from "../../../redux/actions/leads";
 import { Link } from "react-router-dom";
 import Select from "react-select";
@@ -14,7 +13,7 @@ import { getEmployees } from "../../../redux/actions/admin";
 import Loader from "../../loader/Loader";
 import "./leads.scss";
 
-const SalesLeads = () => {
+const SalesShuffledLeads = () => {
   const { leads, message, error, loading } = useSelector(
     (state) => state.leads
   );
@@ -24,13 +23,10 @@ const SalesLeads = () => {
   const [selectedLeads, setSelectedLeads] = useState([]); // State to track selected leads
   const [bulkAssign, setBulkAssign] = useState(null); // State for selected employee for bulk assign
   const [filterTag, setFilterTag] = useState("all"); // State for filtering leads by tag
-  const [filterEmployee, setFilterEmployee] = useState(null); // State for filtering leads by employee
+  const [filterEmployee, setFilterEmployee] = useState(null);
+  // State for filtering leads by employee
   const [filterDate, setFilterDate] = useState(""); // State for filtering leads by date
-  const [filterPhone, setFilterPhone] = useState(""); // State for filtering leads by phone number
-  const [filterName, setFilterName] = useState(""); // State for filtering leads by name
   const [selectCount, setSelectCount] = useState(""); // State for the number of unassigned leads to select
-  const [returnReason, setReturnReason] = useState(""); // State for return reason
-  const [returnDescription, setReturnDescription] = useState(""); // State for return description
 
   useEffect(() => {
     dispatch(getMyLeads());
@@ -94,86 +90,57 @@ const SalesLeads = () => {
     }
   };
 
-  const bulkReturnHandler = (e) => {
-    e.preventDefault();
-    if (selectedLeads.length > 0 && returnReason && returnDescription) {
-      selectedLeads.forEach((leadId) => {
-        dispatch(returnLead(leadId, returnReason.value                         , returnDescription));
-      });
-      setSelectedLeads([]); // Clear selected leads after returning
-      setReturnReason(""); // Clear return reason
-      setReturnDescription(""); // Clear return description
-    } else {
-      toast.error("Please select leads and provide a reason and description for bulk return");
-    }
-  };
   const assignOptions = employees
     ? employees
-      .filter((e) => e.job.department === "sales")
-      .map((e) => ({
-        value: e._id,
-        label: `${e.bioData.name}, (${e.job.department})`,
-      }))
+        .filter((e) => e.job.department === "sales")
+        .map((e) => ({
+          value: e._id,
+          label: `${e.bioData.name}, (${e.job.department})`,
+        }))
     : [];
 
   let freshLeads =
     leads && leads.assigned && leads.assigned.length > 0
-      ? leads.assigned.filter((l) => l.type === "fresh")
+      ? leads.assigned.filter((l) => l.type === "shuffled")
       : [];
 
   const filteredLeads =
     freshLeads && freshLeads.length > 0
       ? freshLeads.filter((lead) => {
-        let tagCondition = false;
+          let tagCondition = false;
 
-        if (filterTag === "Followups") {
-          tagCondition = lead.salesStatus === "Followups";
-        } else if (filterTag === "Meeting Scheduled") {
-          tagCondition = lead.salesStatus === "Meeting Scheduled";
-        } else if (filterTag === "Delayed Clients") {
-          tagCondition = lead.salesStatus === "Delayed Clients";
-        } else if (filterTag === "Close Clients") {
-          tagCondition = lead.salesStatus === "Close Clients";
-        } else if (filterTag === "Visited") {
-          tagCondition = lead.salesStatus === "Visited";
-        } else if (filterTag === "all") {
-          tagCondition = true;
-        }
+          if (filterTag === "Followups") {
+            tagCondition = lead.salesStatus === "Followups";
+          } else if (filterTag === "Meeting Scheduled") {
+            tagCondition = lead.salesStatus === "Meeting Scheduled";
+          } else if (filterTag === "Delayed Clients") {
+            tagCondition = lead.salesStatus === "Delayed Clients";
+          } else if (filterTag === "Close Clients") {
+            tagCondition = lead.salesStatus === "Close Clients";
+          } else if (filterTag === "Visited") {
+            tagCondition = lead.salesStatus === "Visited";
+          } else if (filterTag === "all") {
+            tagCondition = true;
+          }
 
-        let employeeCondition =
-          !filterEmployee ||
-          (lead.assignedTo && lead.assignedTo._id === filterEmployee.value);
+          let employeeCondition =
+            !filterEmployee ||
+            (lead.assignedTo && lead.assignedTo._id === filterEmployee.value);
 
-        let dateCondition =
-          !filterDate || lead.createdAt.split("T")[0] === filterDate;
+          let dateCondition =
+            !filterDate || lead.createdAt.split("T")[0] === filterDate;
 
-        let phoneCondition =
-          !filterPhone || lead.client.phone.includes(filterPhone);
-
-        let nameCondition =
-          !filterName || lead.client.name.toLowerCase().includes(filterName.toLowerCase());
-
-        return tagCondition && employeeCondition && dateCondition && phoneCondition && nameCondition;
-      })
+          return tagCondition && employeeCondition && dateCondition;
+        })
       : [];
 
   const clearFilter = () => {
     setFilterTag("all");
     setFilterEmployee(null);
     setFilterDate("");
-    setFilterPhone("");
-    setFilterName("");
     setSelectedLeads([]);
     setSelectCount("");
   };
-
-  const reasons = [
-    { value: "Not Interested", label: "Not Interested" },
-    { value: "Phone Busy", label: "Phone Busy" },
-    { value: "No Response", label: "No Response" },
-    { value: "Done Based", label: "Done Based" },
-    { value: "Not Used", label: "Not Used" },
-  ];
 
   return loading ? (
     <Loader />
@@ -207,71 +174,15 @@ const SalesLeads = () => {
             />
           </label>
 
-          <label>
-            <span>Phone Number</span>
-            <input
-              type="text"
-              value={filterPhone}
-              onChange={(e) => setFilterPhone(e.target.value)}
-              placeholder="Filter by phone number"
-            />
-          </label>
-
-          <label>
-            <span>Name</span>
-            <input
-              type="text"
-              value={filterName}
-              onChange={(e) => setFilterName(e.target.value)}
-              placeholder="Filter by name"
-            />
-          </label>
-
           <button className="filter-btn" onClick={clearFilter}>
             Clear Filter
           </button>
-        </div>
-
-        <div className="bulk-return">
-          <h3 className="heading">Bulk Return</h3>
-          <label>
-            <span classNam>Return Reason</span>
-            <Select
-              placeholder="Choose Reason"
-              options={reasons}
-              value={returnReason}
-              onChange={setReturnReason}
-            ></Select>
-          </label>
-          <label>
-            <span>Return Description</span>
-            <textarea
-              value={returnDescription}
-              onChange={(e) => setReturnDescription(e.target.value)}
-              placeholder="Description for returning"
-            />
-          </label>
-          <button className="primary-btn" onClick={bulkReturnHandler}>Bulk Return</button>
         </div>
 
         <div className="leads-container">
           <table>
             <thead>
               <tr>
-                <th>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => {
-                      const isChecked = e.target.checked;
-                      setSelectedLeads(
-                        isChecked
-                          ? filteredLeads.map((lead) => lead._id)
-                          : []
-                      );
-                    }}
-                    checked={selectedLeads.length === filteredLeads.length}
-                  />
-                </th>
                 <th>Date</th>
                 <th>Name</th>
                 <th>Phone</th>
@@ -285,13 +196,6 @@ const SalesLeads = () => {
               {filteredLeads && filteredLeads.length > 0 ? (
                 filteredLeads.map((l) => (
                   <tr key={l._id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedLeads.includes(l._id)}
-                        onChange={() => handleLeadSelect(l._id)}
-                      />
-                    </td>
                     <td>{l.createdAt.split("T")[0]}</td>
                     <td>{l.client.name}</td>
                     <td>{l.client.phone}</td>
@@ -311,10 +215,6 @@ const SalesLeads = () => {
                       <Link to={`/sales/leads/${l._id}/return`}>
                         Return Lead
                       </Link>
-
-                      <Link target="_blank" to={`https://wa.me/${l.client.phone}`}>
-                        Whatsapp
-                      </Link>
                     </td>
                   </tr>
                 ))
@@ -326,8 +226,6 @@ const SalesLeads = () => {
             </tbody>
           </table>
         </div>
-
-
       </section>
 
       <div className="sales-overlay"></div>
@@ -335,4 +233,4 @@ const SalesLeads = () => {
   );
 };
 
-export default SalesLeads;
+export default SalesShuffledLeads;

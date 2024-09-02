@@ -28,5 +28,26 @@ export const contractReducer = createReducer(
       state.loading = false;
       state.error = action.payload;
     },
+
+    updateContractStatusRequest: (state) => {
+      state.loading = true;
+    },
+
+    updateContractStatusSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    },
+    updateContractStatusFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    clearError: (state) => {
+      state.error = null;
+    },
+
+    clearMessage: (state) => {
+      state.message = null;
+    },
   }
 );

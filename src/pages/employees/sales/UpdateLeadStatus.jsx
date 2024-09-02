@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Select from "react-select";
-import { getMyLeads, updateLeadStatus, updateSalesLeadStatus } from "../../../redux/actions/leads";
+import {
+  getMyLeads,
+  updateLeadStatus,
+  updateSalesLeadStatus,
+} from "../../../redux/actions/leads";
 import toast from "react-hot-toast";
 import Loader from "../../loader/Loader";
 
@@ -15,14 +19,16 @@ const UpdateLeadStatus = () => {
     { value: "Followups", label: "Followups" },
     { value: "Meeting Scheduled", label: "Meeting Scheduled" },
     { value: "Delayed Clients", label: "Delayed Clients" },
+    { value: "Visited", label: "Visited" },
     { value: "Close Client", label: "Close Client" },
   ];
 
   const dispatch = useDispatch();
 
+
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updateSalesLeadStatus(params.id, status.value))
+    dispatch(updateSalesLeadStatus(params.id, status.value));
   };
 
   useEffect(() => {

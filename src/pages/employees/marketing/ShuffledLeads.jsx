@@ -14,7 +14,7 @@ import { getEmployees } from "../../../redux/actions/admin";
 import Loader from "../../loader/Loader";
 import { convertTimeToPKT } from "../../../utils/utils";
 
-const ReturnedLeads = () => {
+const ShuffledLeads = () => {
   const { leads, message, error, loading } = useSelector(
     (state) => state.leads
   );
@@ -26,8 +26,8 @@ const ReturnedLeads = () => {
   const [filterTag, setFilterTag] = useState("all");
   const [filterEmployee, setFilterEmployee] = useState(null);
   const [filterDate, setFilterDate] = useState("");
+  const [filterMonth, setFilterMonth] = useState(""); // Added state for month filtering
   const [selectCount, setSelectCount] = useState("");
-  const [filterMonth, setFilterMonth] = useState("");
 
   useEffect(() => {
     dispatch(getAllLeads());
@@ -65,7 +65,7 @@ const ReturnedLeads = () => {
     if (selectCount) {
       selectLeads();
     }
-  }, [selectCount, leads, filterTag, filterEmployee, filterDate]);
+  }, [selectCount, leads, filterTag, filterEmployee, filterDate, filterMonth]);
 
   const assignLeadsHandler = (e) => {
     e.preventDefault();
@@ -112,14 +112,14 @@ const ReturnedLeads = () => {
       }))
     : [];
 
-  let freshLeads =
-    leads && leads.leads && leads.leads.length > 0
-      ? leads.leads.filter((l) => l.type === "returned")
+  let shuffledLeads =
+    leads && leads.leads.length > 0
+      ? leads.leads.filter((l) => l.type === "shuffled")
       : [];
 
   const filteredLeads =
-    freshLeads && freshLeads.length > 0
-      ? freshLeads.filter((lead) => {
+    shuffledLeads && shuffledLeads.length > 0
+      ? shuffledLeads.filter((lead) => {
         let tagCondition =
           filterTag === "all" ||
           (filterTag === "Not Interested" &&
@@ -139,10 +139,9 @@ const ReturnedLeads = () => {
           !filterDate || convertTimeToPKT(lead.createdAt).date === filterDate;
 
         let monthCondition =
-          !filterMonth || convertTimeToPKT(lead.createdAt).split("-")[1] === filterMonth;
+          !filterMonth || convertTimeToPKT(lead.createdAt).date.split("-")[1] === filterMonth;
 
         return tagCondition && employeeCondition && dateCondition && monthCondition;
-
       })
       : [];
 
@@ -150,9 +149,9 @@ const ReturnedLeads = () => {
     setFilterTag("all");
     setFilterEmployee(null);
     setFilterDate("");
+    setFilterMonth(""); // Clear month filter
     setSelectedLeads([]);
     setSelectCount("");
-    setFilterMonth("");
   };
 
   const downloadExcel = () => {
@@ -171,7 +170,7 @@ const ReturnedLeads = () => {
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
-    XLSX.writeFile(workbook, "ReturnedLeads.xlsx");
+    XLSX.writeFile(workbook, "ShuffledLeads.xlsx"); // Updated filename
   };
 
   return loading ? (
@@ -200,6 +199,7 @@ const ReturnedLeads = () => {
           <button onClick={downloadExcel} className="primary-btn">
             Download Excel
           </button>
+
           <button onClick={bulkDeleteHandler} className="primary-btn">
             Bulk Delete
           </button>
@@ -218,7 +218,6 @@ const ReturnedLeads = () => {
               { value: "Phone Busy", label: "Phone Busy" },
               { value: "No Response", label: "No Response" },
               { value: "Done Based", label: "Done Based" },
-              { value: "Not Used", label: "Not Used" },
             ]}
             onChange={(selectedOption) => setFilterTag(selectedOption.value)}
           />
@@ -244,16 +243,6 @@ const ReturnedLeads = () => {
         </label>
 
         <label>
-          <span>Select Leads</span>
-          <input
-            type="number"
-            value={selectCount}
-            onChange={(e) => setSelectCount(e.target.value)}
-            placeholder="Enter number of leads"
-          />
-        </label>
-
-        <label htmlFor="">
           <span>Month</span>
           <Select
             placeholder="Choose Month"
@@ -277,7 +266,15 @@ const ReturnedLeads = () => {
           />
         </label>
 
-
+        <label>
+          <span>Select Leads</span>
+          <input
+            type="number"
+            value={selectCount}
+            onChange={(e) => setSelectCount(e.target.value)}
+            placeholder="Enter number of leads"
+          />
+        </label>
 
         <button className="filter-btn" onClick={clearFilter}>
           Clear Filter
@@ -335,4 +332,4 @@ const ReturnedLeads = () => {
   );
 };
 
-export default ReturnedLeads;
+export default ShuffledLeads;

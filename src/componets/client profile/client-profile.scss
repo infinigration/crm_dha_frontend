@@ -4,16 +4,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 2.5vw;
     border-radius: 8px;
     width: 100%;
+    gap: 1%;
 
     > .img-box {
-        flex-basis: 25%;
+        flex-basis: 24.5%;
         background-color: $text-color;
         background-color: white;
         padding: 20px;
-        height: 100%;
+        height: 340px;
         border-radius: 8px;
         display: flex;
         flex-direction: column;
@@ -36,14 +36,14 @@
     }
 
     > form {
-        flex-basis: 70%;
+        flex-basis: 74.5%;
         display: flex;
         flex-direction: column;
         gap: 15px;
         background-color: white;
         padding: 20px;
         border-radius: 8px;
-        height: 100%;
+        height: 340px;
 
         > div {
             width: 100%;

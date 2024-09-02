@@ -9,8 +9,10 @@
   padding: 20px;
   border-radius: 8px;
   position: relative;
+  flex-wrap: wrap;
 
   > label {
+    margin: 5px 0;
     width: 24%;
     span {
       margin-bottom: 5px;
@@ -29,9 +31,7 @@
     justify-content: space-between;
     align-items: center;
 
-    a {
-      margin: 5px 0;
-    }
+   
   }
 }
 .bulk-assign-lead {
@@ -60,4 +60,10 @@
   font-weight: 500;
   color: $accent-color;
   cursor: pointer;
+}
+
+.return-actions{
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }

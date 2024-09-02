@@ -9,6 +9,7 @@ import {
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Loader from "../../pages/loader/Loader";
+import { convertTimeToPKT } from "../../utils/utils";
 const TaskSummary = ({ data }) => {
   const [visible, setVisible] = useState(false);
 
@@ -47,28 +48,24 @@ const TaskSummary = ({ data }) => {
         <thead>
           <tr>
             <th>Date</th>
+            <th>Time</th>
             <th>Done by</th>
             <th>Task</th>
-            <th>Status</th>
-            <th>Follow-up Date</th>
-            <th>Task Close Date</th>
-            <th>Task Closed by</th>
-            <th>Actions</th>
+
+            {/* <th>Actions</th> */}
           </tr>
         </thead>
 
         <tbody>
           {data && data.length > 0
             ? data.map((d, index) => (
-                <tr key={index}>
-                  <td>{d.createdAt.split("T")[0]}</td>
-                  <td>{d.doneBy.bioData.name}</td>
-                  <td>{d.task}</td>
-                  <td>{d.status || "Nill"}</td>
-                  <td>{d.followUpDate && d.followUpDate.split("T")[0] || "Nill"}</td>
-                  <td>{d.taskCloseDate || "Nill"}</td>
-                  <td>{d.taskClosedBy || "Nill"}</td>
-                  <td className="a">
+              <tr key={index}>
+                <td>{convertTimeToPKT(d.createdAt).date}</td>
+                <td>{convertTimeToPKT(d.createdAt).time}</td>
+                <td>{d.doneBy.bioData.name}</td>
+                <td>{d.task}</td>
+
+                {/* <td className="a">
                     <div>
                       <button onClick={() => setVisible(!visible)}>
                         Add Follow Up Date
@@ -88,9 +85,9 @@ const TaskSummary = ({ data }) => {
                       />
                       <button>Update</button>
                     </form>
-                  </td>
-                </tr>
-              ))
+                  </td> */}
+              </tr>
+            ))
             : ""}
         </tbody>
       </table>

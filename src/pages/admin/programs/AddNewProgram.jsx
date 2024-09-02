@@ -1,208 +1,168 @@
-import React, { useEffect, useMemo, useState } from "react";
-import countryList from "react-select-country-list";
+import React, { useState, useMemo, useEffect } from "react";
 import Select from "react-select";
+import countryList from "react-select-country-list";
 import "./program.scss";
-
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../loader/Loader";
 import { createProgram } from "../../../redux/actions/program";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
+import Loader from "../../loader/Loader";
+import { useNavigate } from "react-router-dom";
 
-import { useNavigate } from "react-router-dom"
-import { getAllVendors } from "../../../redux/actions/vendor";
 const AddNewProgram = () => {
-  const [country, setCountry] = useState();
-  const [title, setTitle] = useState();
-  const [duration, setDuration] = useState();
-  const [totalCost, setTotalCost] = useState();
-  const [advance, setAdvance] = useState();
-  const [workPermit, setWorkPermit] = useState();
-  const [passportRequest, setPassportRequest] = useState();
-  const [visaCost, setVisaCost] = useState();
-  const [deduction, setDeduction] = useState();
-  const [province, setProvince] = useState();
-  const [processDuration, setProcessDuration] = useState();
-  const [vendor, setVendor] = useState();
-  const [vendorAmount, setVendorAmount] = useState()
-  const [vendorCurrency, setVendorCurrency] = useState()
+  const [country, setCountry] = useState("");
+  const [title, setTitle] = useState("");
+  const [duration, setDuration] = useState("");
+  const [totalCost, setTotalCost] = useState("");
+  const [deduction, setDeduction] = useState("");
+  const [processDuration, setProcessDuration] = useState("");
+  const [jobs, setJobs] = useState([]);
+  const [documents, setDocuments] = useState([]);
+  const [requirements, setRequirements] = useState([]);
+  const [benefits, setBenefits] = useState([]);
+  const [timelineProcesses, setTimelineProcesses] = useState([]);
+  const [currency, setCurrency] = useState("")
 
-  const [value, setValue] = useState("");
-  const options = useMemo(() => countryList().getData(), []);
-  const [jobs, setJobs] = useState([{ id: 1, title: "", salary: 2 }]);
-  const [documents, setDocuments] = useState([
-    { id: 1, title: "", type: "file" },
-  ]);
-  const [requirements, setRequirements] = useState([
-    { id: 1, title: "", type: "file" },
-  ]);
-  const [benefits, setBenefits] = useState([
-    { id: 1, title: "", type: "file" },
-  ]);
-
-  const changeHandler = (value) => {
-    setValue(value);
+  const handleAddJob = () => {
+    setJobs([...jobs, { id: jobs.length + 1, title: "", salary: "" }]);
   };
 
   const handleInputChange = (index, event) => {
-    const newJobs = [...jobs];
-    newJobs[index].title = event.target.value;
-    setJobs(newJobs);
-  };
-
-  const handleDocumentInputChange = (index, event) => {
-    const newDoc = [...documents];
-    newDoc[index].title = event.target.value;
-    setDocuments(newDoc);
-  };
-
-  const handleRequirementsInputChange = (index, event) => {
-    const newReq = [...requirements];
-    newReq[index].title = event.target.value;
-    setRequirements(newReq);
-  };
-
-  const handleBenefitsInputChange = (index, event) => {
-    const newBenefit = [...benefits];
-    newBenefit[index].title = event.target.value;
-    setBenefits(newBenefit);
+    const values = [...jobs];
+    values[index][event.target.name] = event.target.value;
+    setJobs(values);
   };
 
   const handleSalaryChange = (index, event) => {
-    const newJobs = [...jobs];
-    newJobs[index].salary = event.target.value;
-    setJobs(newJobs);
-  };
-
-  const handleAddJob = (e) => {
-    e.preventDefault();
-    const newId = jobs.length + 1;
-    setJobs([...jobs, { id: newId, title: "", salary: 0 }]);
+    const values = [...jobs];
+    values[index][event.target.name] = event.target.value;
+    setJobs(values);
   };
 
   const handleRemoveJob = (index, e) => {
     e.preventDefault();
-    const newJobs = [...jobs];
-    newJobs.splice(index, 1);
-    setJobs(newJobs);
+    const values = [...jobs];
+    values.splice(index, 1);
+    setJobs(values);
   };
 
-  const handleAddDocument = (e) => {
-    e.preventDefault();
-    const newId = documents.length + 1;
-    setDocuments([...documents, { id: newId, title: "" }]);
+  const handleAddDocument = () => {
+    setDocuments([...documents, { id: documents.length + 1, title: "" }]);
+  };
+
+  const handleDocumentInputChange = (index, event) => {
+    const values = [...documents];
+    values[index][event.target.name] = event.target.value;
+    setDocuments(values);
   };
 
   const handleRemoveDocument = (index, e) => {
     e.preventDefault();
-    const newDocument = [...documents];
-    newDocument.splice(index, 1);
-    setDocuments(newDocument);
+    const values = [...documents];
+    values.splice(index, 1);
+    setDocuments(values);
   };
 
-  const handleAddRequirement = (e) => {
-    e.preventDefault();
-    const newId = requirements.length + 1;
-    setRequirements([...requirements, { id: newId, title: "" }]);
+  const handleAddRequirement = () => {
+    setRequirements([...requirements, { id: requirements.length + 1, title: "" }]);
+  };
+
+  const handleRequirementsInputChange = (index, event) => {
+    const values = [...requirements];
+    values[index][event.target.name] = event.target.value;
+    setRequirements(values);
   };
 
   const handleRemoveRequirement = (index, e) => {
     e.preventDefault();
-    const newReq = [...requirements];
-    newReq.splice(index, 1);
-    setRequirements(newReq);
+    const values = [...requirements];
+    values.splice(index, 1);
+    setRequirements(values);
   };
 
-  const handleAddBenefit = (e) => {
-    e.preventDefault();
-    const newId = benefits.length + 1;
-    setBenefits([...benefits, { id: newId, title: "" }]);
+  const handleAddBenefit = () => {
+    setBenefits([...benefits, { id: benefits.length + 1, title: "" }]);
+  };
+
+  const handleBenefitsInputChange = (index, event) => {
+    const values = [...benefits];
+    values[index][event.target.name] = event.target.value;
+    setBenefits(values);
   };
 
   const handleRemoveBenefit = (index, e) => {
     e.preventDefault();
-    const newBenefits = [...benefits];
-    newBenefits.splice(index, 1);
-    setBenefits(newBenefits);
+    const values = [...benefits];
+    values.splice(index, 1);
+    setBenefits(values);
   };
 
-  useEffect(() => {
-    dispatch(getAllVendors())
-  }, [])
+  const handleAddTimelineProcess = () => {
+    setTimelineProcesses([...timelineProcesses, { id: timelineProcesses.length + 1, title: "" }]);
+  };
 
-  let { vendors } = useSelector(state => state.vendor)
-  const vendorOptions = vendors && vendors.length > 0 ? vendors.map((v) => ({
-    value: v._id,
-    label: v.name,
-  })) : [{ value: "", label: "" }]
+  const handleTimelineProcessChange = (index, event) => {
+    const values = [...timelineProcesses];
+    values[index][event.target.name] = event.target.value;
+    setTimelineProcesses(values);
+  };
 
-
-  let vendorCurrencyOptions = [
-    { value: "$", label: "USD" },
-    { value: "€", label: "Euro" },
-  ]
-
-
-
-
-  const dispatch = useDispatch();
-
+  const handleRemoveTimelineProcess = (index, e) => {
+    e.preventDefault();
+    const values = [...timelineProcesses];
+    values.splice(index, 1);
+    setTimelineProcesses(values);
+  };
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(createProgram(
+      country.value,
+      title,
+      duration,
+      totalCost,
+      deduction,
+      processDuration,
+      currency.value,
+      jobs,
+      documents,
+      requirements,
+      benefits,
+      timelineProcesses))
 
-    dispatch(
-      createProgram(
-        value.label,
-        title,
-        duration,
-        totalCost,
-        advance,
-        workPermit,
-        passportRequest,
-        visaCost,
-        deduction,
-        province,
-        processDuration,
-        jobs,
-        documents,
-        requirements,
-        benefits,
-        vendor.value,
-        vendorAmount,
-        vendorCurrency.value
-      )
-    );
+  };
+
+  const options = useMemo(() => countryList().getData(), []);
+
+  const changeHandler = (value) => {
+    setCountry(value);
   };
 
 
-  const { loading, error, message } = useSelector((state) => state.program);
+  const { message, error, loading } = useSelector(state => state.program)
 
-  const navigate = useNavigate();
   useEffect(() => {
     if (message) {
-      toast.success(message);
-      dispatch({ type: "clearMessage" });
-      navigate("/admin/programs");
+      toast.success(message)
+      dispatch({ type: "clearMessage" })
+      navigate("/operations/programs")
     }
 
     if (error) {
-      toast.error(error);
-      dispatch({ type: "clearError" });
+      toast.error(error)
+      dispatch({ type: "clearError" })
     }
-  }, [error, message]);
-
-  return loading ? (
-    <Loader />
-  ) : (
-    <section className="section" id="add-new-program">
+  }, [message, error])
+  return (
+    loading ? <Loader /> : <section className="section" id="add-new-program">
       <form action="" onSubmit={submitHandler}>
-
         <div className="general-information">
-          <h3>Gernal Information</h3>
+          <h3>General Information</h3>
           <div className="l-i">
             <label htmlFor="">Choose Country</label>
             <Select
               options={options}
-              value={value}
+              value={country}
               onChange={changeHandler}
               placeholder="Choose Country"
             />
@@ -210,66 +170,31 @@ const AddNewProgram = () => {
 
           <div className="l-i">
             <label htmlFor="">Title</label>
-            <input type="text" placeholder="e.g Canada TRC" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <input
+              type="text"
+              placeholder="e.g Canada TRC"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
           </div>
 
           <div className="l-i">
-            <label htmlFor="">Duration in Years</label>
+            <label htmlFor="">Duration of Work Permit</label>
             <input
               type="text"
-              placeholder="Years e.g 1"
+              placeholder="Duration"
               value={duration}
               onChange={(event) => setDuration(event.target.value)}
             />
           </div>
 
           <div className="l-i">
-            <label htmlFor="">Total Cost (PKR)</label>
+            <label htmlFor="">Total Cost</label>
             <input
               type="text"
-              placeholder="15 Lacs"
+              placeholder="Enter Total Cost"
               value={totalCost}
               onChange={(event) => setTotalCost(event.target.value)}
-            />
-          </div>
-
-          <div className="l-i">
-            <label htmlFor="">Advance (Installement 1 | PKR)</label>
-            <input
-              type="text"
-              placeholder="10 Lacs"
-              value={advance}
-              onChange={(event) => setAdvance(event.target.value)}
-            />
-          </div>
-
-          <div className="l-i">
-            <label htmlFor="">Work Permit (Installement 2 | PKR)</label>
-            <input
-              type="text"
-              placeholder="10 Lacs"
-              value={workPermit}
-              onChange={(event) => setWorkPermit(event.target.value)}
-            />
-          </div>
-
-          <div className="l-i">
-            <label htmlFor="">Passport Request (Installement 3 | PKR)</label>
-            <input
-              type="text"
-              placeholder="10 Lacs"
-              value={passportRequest}
-              onChange={(event) => setPassportRequest(event.target.value)}
-            />
-          </div>
-
-          <div className="l-i">
-            <label htmlFor="">Visa Cost</label>
-            <input
-              type="text"
-              placeholder="10 Lacs"
-              value={visaCost}
-              onChange={(event) => setVisaCost(event.target.value)}
             />
           </div>
 
@@ -284,23 +209,27 @@ const AddNewProgram = () => {
           </div>
 
           <div className="l-i">
-            <label htmlFor="">Province</label>
-            <input
-              type="text"
-              placeholder="Punjab"
-              value={province}
-              onChange={(event) => setProvince(event.target.value)}
-            />
-          </div>
-
-          <div className="l-i">
-            <label htmlFor="">Process Duration (In Months)</label>
+            <label htmlFor="">Process Duration</label>
             <input
               type="text"
               placeholder="5 Months"
               value={processDuration}
               onChange={(event) => setProcessDuration(event.target.value)}
             />
+          </div>
+
+          <div className="l-i">
+            <label htmlFor="">Currency</label>
+            <Select placeholder="Choose Currency" value={currency} onChange={setCurrency}
+              options={[
+                { value: "PKR", label: "PKR" },
+                { value: "USD", label: "USD" },
+                { value: "CAD", label: "CAD" },
+                { value: "Pounds", label: "Pounds" },
+                { value: "Euros", label: "Euros" },
+
+              ]}
+            ></Select>
           </div>
         </div>
 
@@ -317,7 +246,7 @@ const AddNewProgram = () => {
                 <input
                   type="text"
                   id={`job${job.id}`}
-                  name={`job${job.id}`}
+                  name="title"
                   placeholder="Job Title"
                   value={job.title}
                   onChange={(event) => handleInputChange(index, event)}
@@ -325,7 +254,7 @@ const AddNewProgram = () => {
                 <input
                   type="number"
                   id={`salary${job.id}`}
-                  name={`salary${job.id}`}
+                  name="salary"
                   placeholder="Salary"
                   value={job.salary}
                   onChange={(event) => handleSalaryChange(index, event)}
@@ -354,7 +283,7 @@ const AddNewProgram = () => {
                 <input
                   type="text"
                   id={`doc${doc.id}`}
-                  name={`doc${doc.id}`}
+                  name="title"
                   placeholder="Document Title"
                   value={doc.title}
                   onChange={(event) => handleDocumentInputChange(index, event)}
@@ -383,12 +312,10 @@ const AddNewProgram = () => {
                 <input
                   type="text"
                   id={`req${req.id}`}
-                  name={`req${req.id}`}
+                  name="title"
                   placeholder="Requirements Title"
                   value={req.title}
-                  onChange={(event) =>
-                    handleRequirementsInputChange(index, event)
-                  }
+                  onChange={(event) => handleRequirementsInputChange(index, event)}
                 />
                 <button
                   className="remove"
@@ -414,7 +341,7 @@ const AddNewProgram = () => {
                 <input
                   type="text"
                   id={`ben${ben.id}`}
-                  name={`ben${ben.id}`}
+                  name="title"
                   placeholder="Benefits Title"
                   value={ben.title}
                   onChange={(event) => handleBenefitsInputChange(index, event)}
@@ -430,38 +357,36 @@ const AddNewProgram = () => {
           </div>
         </div>
 
-
-        <div className="jobs-available">
+        <div className="timeline-process">
           <div className="heading-row">
-            <h3>Vendor Details</h3>
+            <h3>Timeline Processes</h3>
+            <button onClick={handleAddTimelineProcess}>Add Timeline Process</button>
           </div>
 
-          <div className="l-i">
-            <label htmlFor="">Vendor</label>
-            <Select placeholder="Choose Vendor"
-              value={vendor} defaultInputValue={vendor} onChange={setVendor} options={vendorOptions}>
-            </Select>
-          </div>
-
-          <div className="l-i">
-            <label htmlFor="">Vendor Currency</label>
-            <Select placeholder="Vendor Currency"
-              value={vendorCurrency} defaultInputValue={vendorCurrency} onChange={setVendorCurrency} options={vendorCurrencyOptions}>
-            </Select>
-          </div>
-
-          <div className="l-i">
-            <label htmlFor="">Vendor Amount</label>
-            <input
-              type="text"
-              placeholder="100"
-              value={vendorAmount}
-              onChange={(e) => setVendorAmount(e.target.value)}
-            />
+          <div className="l">
+            {timelineProcesses.map((process, index) => (
+              <div key={process.id} className="l-i">
+                <label htmlFor={`process${process.id}`}>Process {process.id}</label>
+                <input
+                  type="text"
+                  id={`process${process.id}`}
+                  name="title"
+                  placeholder="Timeline Process Title"
+                  value={process.title}
+                  onChange={(event) => handleTimelineProcessChange(index, event)}
+                />
+                <button
+                  className="remove"
+                  onClick={(e) => handleRemoveTimelineProcess(index, e)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 
-        <button className="submit-button">Create Program</button>
+        <button type="submit" className="primary-btn">Submit</button>
       </form>
     </section>
   );

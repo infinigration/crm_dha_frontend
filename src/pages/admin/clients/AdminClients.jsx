@@ -22,7 +22,7 @@ const AdminClients = () => {
               <input type="text" placeholder="Search by Name" />
             </div> */}
 
-     
+
       </div>
       <table>
         <thead>
@@ -43,40 +43,39 @@ const AdminClients = () => {
         <tbody>
           {clients && clients.length > 0
             ? clients.map((c, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{c.subagent || "Nill"}</td>
-                  <td>{c.signingDate || "Not Signed"}</td>
-                  <td>{c.lead.client.name}</td>
-                  <td></td>
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{c.subagent || "Nill"}</td>
+                <td>{c.signingDate || "Not Signed"}</td>
+                <td>{c.lead.client.name}</td>
+                <td></td>
 
-                  <td>{c.lead.client.email}</td>
-                  <td>{c.lead.client.remarks || "No Remarks"}</td>
-                  <td>{c.lead.client.phone}</td>
-                  <td>{c.lead.status}</td>
-                  <td className="actions c-actions">
-                    <div>
-                      <Link to={`/admin/leads/${c.lead._id}/activities`}>
-                        Activites
-                      </Link>
-                      <Link to={`/admin/contract/${c.contract._id}`}>
-                        View Contract
-                      </Link>
-                      {/* <Link to={`/admin/invoices/6686599a4a480b72af664d8f`}>View Invoice</Link> */}
-                      <button onClick={() => setStatusVisible(!statusVisible)}>
-                        Update Status
-                      </button>
-                    </div>
-                    <form
-                      action=""
-                      style={{ display: statusVisible ? "block" : "none" }}
-                    >
-                      <Select placeholder="Choose Status" />
-                      <button>Apply</button>
-                    </form>
-                  </td>
-                </tr>
-              ))
+                <td>{c.lead.client.email}</td>
+                <td>{c.lead.client.remarks || "No Remarks"}</td>
+                <td>{c.lead.client.phone}</td>
+                <td>{c.contract.operationStatus}</td>
+                <td className="actions c-actions">
+                  <div>
+                    <Link to={`/operation/contract/${c.lead._id}/activities`}>
+                      Activites
+                    </Link>
+                    <Link to={`/admin/contract/${c.contract._id}`}>
+                      View Contract
+                    </Link>
+
+                    <Link to={`/operation/contract/${c.contract._id}/updatestatus`}>
+                      Update Status
+                    </Link>
+
+                    <Link to={`/operation/contract/${c.contract._id}/updatestage`}>
+                      Update Stage
+                    </Link>
+
+                  </div>
+
+                </td>
+              </tr>
+            ))
             : ""}
         </tbody>
       </table>

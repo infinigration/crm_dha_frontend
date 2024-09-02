@@ -1,117 +1,113 @@
 @import "../../../style.scss";
 
-#add-new-program, #update-program {
-    form {
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
+#add-new-program,
+#update-program {
+  form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vw;
+
+    h3 {
+      font-size: 18px;
+      font-weight: 550;
+      color: $dark-color;
+    }
+
+    .general-information,
+    .jobs-available {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8vw;
+      .l-i {
         display: flex;
         flex-direction: column;
-        gap: 1.5vw;
+        gap: 0.5vw;
 
-        h3 {
-            font-size: 18px;
-            font-weight: 550;
-            color: $dark-color;
+        label {
+          font-size: 12px;
+          font-weight: 600;
         }
 
-        .general-information,
-        .jobs-available {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8vw;
-            .l-i {
-                display: flex;
-                flex-direction: column;
-                gap: 0.5vw;
-
-                label {
-                    font-size: 12px;
-                    font-weight: 600;
-                }
-
-                input {
-                    font-size: 14px;
-                }
-            }
+        input {
+          font-size: 14px;
         }
-
-        .heading-row {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            button {
-                width: 150px;
-                height: 30px;
-                border: none;
-                outline: none;
-                background-color: $accent-color;
-                color: white;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-        }
-
-        .remove {
-            width: 100px;
-            background-color: crimson;
-            border: none;
-            outline: none;
-            color: white;
-            height: 30px;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-            margin-bottom: 0.8vw;
-        }
-
-        .submit-button {
-            background-color: $accent-color;
-            padding: 10px;
-            border: none;
-            outline: none;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-        }
+      }
     }
+
+    .heading-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      button {
+        width: 150px;
+        height: 30px;
+        border: none;
+        outline: none;
+        background-color: $accent-color;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    }
+
+    .remove {
+      width: 100px;
+      background-color: crimson;
+      border: none;
+      outline: none;
+      color: white;
+      height: 30px;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 0.8vw;
+    }
+
+    .submit-button {
+      background-color: $accent-color;
+      padding: 10px;
+      border: none;
+      outline: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  }
 }
 
 #program-details {
-    h2{
-        font-size: 24px;
-        color: $dark-color;
-        font-weight: 550;
+  h2 {
+    font-size: 24px;
+    color: $dark-color;
+    font-weight: 550;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: $dark-color;
+  }
+
+  p {
+    font-size: 16px;
+    color: $text-color;
+  }
+
+  .general-information {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+
+    .feild {
+      margin: 10px 0;
+      display: flex;
+      gap: 1vw;
     }
-
-    h3{
-        font-size: 16px;
-        font-weight: 600;
-        color: $dark-color;
-    }
-
-    p{
-        font-size: 16px;
-        color: $text-color;
-    }
-
-    
-    .general-information {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-
-        .feild{
-            margin: 10px 0;
-            display: flex;
-            gap: 1vw;
-
-            
-        }
-
-
-    }
+  }
 }

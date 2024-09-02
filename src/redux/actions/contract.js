@@ -2,21 +2,15 @@ import axios from "axios";
 import { server } from "../store";
 
 export const createContract =
-  (lead, program, bank, installements, discount) => async (dispatch) => {
+  (lead, program, installements, discount) => async (dispatch) => {
     dispatch({ type: "createContractRequest" });
 
-    // lead,
-    // program,
-    // bank,
-    // installments,
-    // discount,
     try {
       const { data } = await axios.post(
         `${server}/create_contract`,
         {
           lead,
           program,
-          bank,
           installements,
           discount,
         },
@@ -29,7 +23,7 @@ export const createContract =
       dispatch({ type: "createContractSuccess", payload: data });
     } catch (error) {
       dispatch({
-        type: "getAllContractFail",
+        type: "createContractFail",
         payload: error.response.data.message,
       });
     }
@@ -52,6 +46,29 @@ export const getAllContracts = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAllContractFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const updateContractStatus = (id, status) => async (dispatch) => {
+  dispatch({ type: "updateContractStatusRequest" });
+
+  try {
+    const { data } = await axios.put(
+      `${server}/contract/updatestatus`,
+      { id, status },
+
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+
+    dispatch({ type: "updateContractStatusSuccess", payload: data });
+  } catch (error) {
+    dispatch({
+      type: "updateContractStatusFail",
       payload: error.response.data.message,
     });
   }

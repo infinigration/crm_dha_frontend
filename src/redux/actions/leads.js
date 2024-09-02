@@ -241,7 +241,19 @@ export const uploadClientProfile = (formdata, id) => async (dispatch) => {
 };
 
 export const updateClientProfile =
-  (cnic, dob, passport, program, email, id) => async (dispatch) => {
+  (
+    cnic,
+    dob,
+    passport,
+    program,
+    email,
+    age,
+    education,
+    experience,
+    travelHistory,
+    id
+  ) =>
+  async (dispatch) => {
     dispatch({ type: "uploadClientProfileRequest" });
 
     try {
@@ -253,6 +265,10 @@ export const updateClientProfile =
           passport: passport,
           program: program,
           email: email,
+          age,
+          education,
+          experience,
+          travelHistory,
         },
 
         {

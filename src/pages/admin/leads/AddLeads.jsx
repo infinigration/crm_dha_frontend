@@ -23,6 +23,14 @@ const AddLeads = () => {
   const navigate = useNavigate();
   const { programs } = useSelector((state) => state.program);
 
+  const getDate = () => {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const date = today.getDate();
+    return `${year}-${month}-${date}`;
+  };
+
   const sourceOptions = [
     { value: "facebook", label: "Facebook" },
     { value: "instagram", label: "Instagram" },
@@ -50,6 +58,7 @@ const AddLeads = () => {
       city: clientCity,
       campaign: campaign,
       status: "Created",
+      createdAt: getDate(),
     };
     const updatedLeads = [...leads, newLead];
     dispatch(createLead(updatedLeads));
@@ -80,6 +89,7 @@ const AddLeads = () => {
         city: row[3],
         campaign: row[4],
         status: "Created",
+        createdAt: getDate(),
       }));
 
       // Updating leads state

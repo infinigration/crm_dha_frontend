@@ -16,12 +16,18 @@ const Profiling = ({ client }) => {
     leads && leads.length > 0 ? leads.find((l) => l._id === "") : params.id;
 
   console.log(filteredLead);
-  const [cnic, setCnic] = useState(client.cnic);
-  const [email, setEmail] = useState(client.email);
-  const [passport, setPassport] = useState(client.passport);
-  const [program, setProgram] = useState(client.program);
+  const [cnic, setCnic] = useState(client?.cnic || "");
+  const [email, setEmail] = useState(client?.email || "");
+  const [passport, setPassport] = useState(client?.passport || "");
+  const [program, setProgram] = useState(client?.program || "");
+  const [age, setAge] = useState(client?.age || 0);
+  const [education, setEducation] = useState(client?.education || "");
+  const [experience, setExperience] = useState(client?.experience || "");
+  const [travelHistory, setTravelHistory] = useState(
+    client?.travel_history || ""
+  );
   const [dob, setDob] = useState(
-    client.dob != null ? client.dob.split("T")[0] : ""
+    client?.dob != null ? client.dob.split("T")[0] : ""
   );
   const { programs } = useSelector((state) => state.program);
 
@@ -33,7 +39,7 @@ const Profiling = ({ client }) => {
     programs && programs.length > 0
       ? programs.map((p) => ({
           value: p._id,
-          label: p.generalInformation[0].country,
+          label: p.generalInformation[0].title,
         }))
       : [];
 
@@ -46,7 +52,20 @@ const Profiling = ({ client }) => {
       return toast.error("Invalid CNIC");
     }
 
-    dispatch(updateClientProfile(cnic, dob, passport, program && program.value, email, params.id));
+    dispatch(
+      updateClientProfile(
+        cnic,
+        dob,
+        passport,
+        program && program.value,
+        email,
+        age,
+        education,
+        experience,
+        travelHistory,
+        params.id
+      )
+    );
   };
   const { error, loading, message } = useSelector((state) => state.leads);
 
@@ -74,6 +93,46 @@ const Profiling = ({ client }) => {
             placeholder="Enter CNIC"
             value={cnic}
             onChange={(e) => setCnic(e.target.value)}
+          />
+        </div>
+
+        <div className="la">
+          <label htmlFor="">Age</label>
+          <input
+            type="number"
+            placeholder="Enter Age"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+          />
+        </div>
+
+        <div className="la">
+          <label htmlFor="">Education</label>
+          <input
+            type="text"
+            placeholder="Enter Education"
+            value={education}
+            onChange={(e) => setEducation(e.target.value)}
+          />
+        </div>
+
+        <div className="la">
+          <label htmlFor="">Experience</label>
+          <input
+            type="text"
+            placeholder="Enter Experience"
+            value={experience}
+            onChange={(e) => setExperience(e.target.value)}
+          />
+        </div>
+
+        <div className="la">
+          <label htmlFor="">Travel History</label>
+          <input
+            type="text"
+            placeholder="Enter Travel History"
+            value={travelHistory}
+            onChange={(e) => setTravelHistory(e.target.value)}
           />
         </div>
 

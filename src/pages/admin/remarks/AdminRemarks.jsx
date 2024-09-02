@@ -4,18 +4,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { createRemarks, getAllRemarks } from "../../../redux/actions/remark";
 import Remark from "../../../componets/remark/Remark";
 import Loader from "../../loader/Loader";
-import { createLead } from "../../../redux/actions/leads";
+import { createLead, getMyLeads } from "../../../redux/actions/leads";
 import toast from "react-hot-toast";
+import moment from 'moment-timezone';
+
 const AdminRemarks = ({ lead }) => {
   const { leads } = useSelector((state) => state.leads);
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [remark, setRemark] = useState("");
 
-  const filteredLead =
-    leads && leads.leads.length > 0
-      ? leads.leads.find((l) => l._id === lead)
-      : "";
+  console.log(lead)
+
+  const { auth, isAuthenticated } = useSelector(state => state.user)
+  let filteredLead = {};
+
+  if (isAuthenticated && auth.user.job.department === "sales") {
+    filteredLead = leads && leads.assigned && leads.assigned.length > 0 ? leads.assigned.find((f) => f._id === lead) : {}
+  }
+  else if (isAuthenticated && auth.user.job.department === "operations") {
+    filteredLead = leads && leads.leads && leads.leads.length > 0 ? leads.leads.find((f) => f._id === lead) : {}
+  }
+
+  else {
+    filteredLead = leads && leads.leads && leads.leads.length > 0 ? leads.leads.find((f) => f._id === lead) : {}
+  }
+
+  console.log(filteredLead)
+
   let remarks = filteredLead.remarks;
 
   const submitHandler = (e) => {
@@ -29,6 +45,7 @@ const AdminRemarks = ({ lead }) => {
     if (message) {
       toast.success(message);
       dispatch({ type: "clearMessage" });
+
     }
 
     if (error) {
